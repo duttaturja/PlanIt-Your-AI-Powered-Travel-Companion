@@ -1,0 +1,22 @@
+{
+  "name": "PlanIT-Your-AI-Powered-Travel-Companion",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "tailwind-dev": "npx tailwindcss -i ./static/input.css -o ./static/style.css --watch",
+    "build": "npx tailwindcss -i ./static/input.css -o ./static/style.css --minify",
+    "dev": "concurrently \"npm run tailwind-dev\" \"python manage.py runserver\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duttaturja/PlanIT-Your-AI-Powered-Travel-Companion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duttaturja/PlanIT-Your-AI-Powered-Travel-Companion/issues"
+  },
+  "homepage": "https://github.com/duttaturja/PlanIT-Your-AI-Powered-Travel-Companion#readme",
+    "devDependencies": {
+    "concurrently": "^9.0.1",
+    "tailwindcss": "^3.4.11"
+  }
+}

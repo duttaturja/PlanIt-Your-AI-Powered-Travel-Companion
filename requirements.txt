@@ -1,0 +1,4 @@
+django-browser-reload
+Django
+django-allauth[socialaccount]
+django-widget-tweaks
