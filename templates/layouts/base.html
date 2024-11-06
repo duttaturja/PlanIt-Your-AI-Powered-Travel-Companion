@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+{% include 'fragments/navbar.html' %}
+<div class="container mx-auto bg-white flex items-center justify-center min-h-screen py-4">
+    {% block content %}{% endblock content %}
+</div>
+{% endblock body %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n widget_tweaks %}
+{% block body %}
+<div class="container mx-auto">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center text-3xl font-extrabold text-gray-900">
+                <!-- {% trans "Change Email" %} -->
+                Change Email
+            </div>
+
+            <!-- Display form errors -->
+            {% if form.errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <strong class="font-bold">{% trans "Error:" %}</strong>
+                <ul class="list-disc pl-5">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'account_email' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="id_email" class="block text-sm font-medium text-gray-700">New Email:</label>
+                    <input type="email" name="email" id="id_email" {% render_field form.email
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        %}>
+                </div>
+                <button type="submit"
+                    class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {% trans "Change Email" %}
+                </button>
+            </form>
+            <p class="mt-6 text-center text-sm text-gray-600">
+                {% trans "Go back to" %} <a href="{% url 'home' %}"
+                    class="font-medium text-indigo-600 hover:text-indigo-500">{% trans "Account Profile" %}</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

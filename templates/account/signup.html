@@ -1,0 +1,109 @@
+{% extends 'layouts/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+Sign Up
+{{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<div class="max-w-md w-full bg-white p-6 rounded-lg">
+        <h1 class="text-2xl font-bold mb-4 text-center">Sign Up</h1>
+        <p class="text-center mb-6">Already have an account? Please
+                <a href="/accounts/login/" class="text-blue-500 hover:underline">
+                        sign in
+                </a>.
+        </p>
+        <form method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                        {% if form.email.errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                                <strong class="font-bold">Error:</strong>
+                                <ul class="list-disc pl-5">
+                                        {% for error in form.email.errors %}
+                                        <li>{{ error }}</li>
+                                        {% endfor %}
+                                </ul>
+                        </div>
+                        {% endif %}
+                        <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
+                        {% render_field form.email class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
+                </div>
+                <div class="mb-4">
+                        {% if form.password1.errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                                <strong class="font-bold">Error:</strong>
+                                <ul class="list-disc pl-5">
+                                        {% for error in form.password1.errors %}
+                                        <li>{{ error }}</li>
+                                        {% endfor %}
+                                </ul>
+                        </div>
+                        {% endif %}
+                        <label for="id_password" class="block text-sm font-medium text-gray-700">Password
+                        </label>
+                        {% render_field form.password1 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
+                </div>
+                <div class="mb-4">
+                        {% if form.password2.errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                                <strong class="font-bold">Error:</strong>
+                                <ul class="list-disc pl-5">
+                                        {% for error in form.password2.errors %}
+                                        <li>{{ error }}</li>
+                                        {% endfor %}
+                                </ul>
+                        </div>
+                        {% endif %}
+                        <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm
+                                Password</label>
+                        {% render_field form.password2 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
+                </div>
+                {% for field in form %}
+                {% if field.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                        <strong class="font-bold">Error:</strong>
+                        <ul class="list-disc pl-5">
+                                {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                        </ul>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white p-3 rounded-md text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Sign Up
+                </button>
+        </form>
+        <!-- <hr class="my-6">
+        <h2 class="text-lg font-semibold mb-4 text-center">Or use a third-party</h2>
+        <ul class="space-y-2">
+                <li><a href="/accounts/amazon/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Amazon</a>
+                </li>
+                <li><a href="/accounts/facebook/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Facebook</a>
+                </li>
+                <li><a href="/accounts/github/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">GitHub</a>
+                </li>
+                <li><a href="/accounts/google/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Google</a>
+                </li>
+                <li><a href="/accounts/lichess/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Lichess</a>
+                </li>
+                <li><a href="/accounts/microsoft/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Microsoft</a>
+                </li>
+                <li><a href="/accounts/telegram/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Telegram</a>
+                </li>
+                <li><a href="/accounts/twitch/login/?process=login"
+                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Twitch</a>
+                </li>
+        </ul> -->
+</div>
+{% endblock %}
