@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Frontend</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#1a1a1a',
+                        darkSecondary: '#2d2d2d',
+                        darkInput: '#3d3d3d',
+                        darkBorder: '#4d4d4d'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Dark mode styles */
+        .dark body {
+            background-color: var(--darkBg);
+            color: #ffffff;
+        }
+
+        .dark .chat-container {
+            background-color: var(--darkSecondary);
+        }
+
+        .dark .message-input {
+            background-color: var(--darkInput);
+            color: #ffffff;
+            border-color: var(--darkBorder);
+        }
+
+        .dark .bot-message {
+            background-color: var(--darkInput);
+        }
+
+        .dark .user-message {
+            background-color: #0066cc;
+        }
+
+        /* Scrollbar styling */
+        #chatMessages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chatMessages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chatMessages::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        #chatMessages::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Message animation */
+        .message-animation {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading dots animation */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #666;
+            border-radius: 50%;
+            animation: typingDot 1s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingDot {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .dark .typing-indicator {
+            background: var(--darkInput);
+        }
+
+        .dark .typing-dot {
+            background: #fff;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-darkBg transition-colors duration-300">
+    <div class="container mx-auto p-4 max-w-4xl">
+        <!-- Header with Dark Mode Toggle -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">PlanIt</h1>
+            <button id="darkModeToggle"
+                class="px-5 py-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+                <i class="fas fa-sun text-yellow-500 text-xl dark:hidden"></i>
+                <i class="fas fa-moon text-blue-300 text-xl hidden dark:block"></i>
+            </button>
+        </div>
+
+        <!-- Chat Container -->
+        <div
+            class="chat-container bg-white dark:bg-darkSecondary rounded-xl shadow-lg p-4 transition-colors duration-300">
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="h-[500px] overflow-y-auto mb-4 p-2 scroll-smooth">
+                <!-- Messages will be inserted here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="flex gap-2">
+                <input type="text" id="userInput"
+                    class="message-input flex-grow p-3 border rounded-lg dark:bg-darkInput dark:text-white dark:border-darkBorder focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    placeholder="Type your message...">
+                <button id="sendButton"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span>Send</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check for system dark mode preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Check for saved theme preference
+        if (localStorage.theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // Rest of your existing JavaScript code...
+
+
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // (Chat functionality remains the same)
+
+        // Add typing indicator
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator message-animation';
+            indicator.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatMessages.appendChild(indicator);
+            return indicator;
+        }
+
+        // Sample user data
+        const users = {
+            user: { name: 'You', avatar: 'https://via.placeholder.com/40' },
+            bot: { name: 'PlanIt', avatar: 'https://via.placeholder.com/40?text=Bot' }
+        };
+
+        // Function to add a message to the chat
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('flex', 'items-start', 'mb-4');
+
+            const avatarElement = document.createElement('img');
+            avatarElement.src = users[sender].avatar;
+            avatarElement.alt = users[sender].name;
+            avatarElement.classList.add('w-10', 'h-10', 'rounded-full', 'mr-3');
+
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('flex', 'flex-col');
+
+            const nameElement = document.createElement('span');
+            nameElement.textContent = users[sender].name;
+            nameElement.classList.add('font-bold', 'mb-1', 'dark:text-white');
+
+            const textElement = document.createElement('p');
+            textElement.textContent = message;
+            textElement.classList.add('bg-gray-100', 'dark:bg-gray-700', 'rounded-lg', 'p-2', 'dark:text-white');
+
+            contentElement.appendChild(nameElement);
+            contentElement.appendChild(textElement);
+
+            messageElement.appendChild(avatarElement);
+            messageElement.appendChild(contentElement);
+
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Update sendMessage function to include typing indicator
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                userInput.disabled = true;
+                sendButton.disabled = true;
+
+                addMessage('user', message);
+                userInput.value = '';
+
+                const typingIndicator = showTypingIndicator();
+
+                setTimeout(() => {
+                    typingIndicator.remove();
+                    addMessage('bot', 'Gawk Gawk');
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
+                }, 2000);
+            }
+        }
+
+        // Initial message
+        addMessage('bot', 'Hello! How can I assist you today?');
+    </script>
+</body>
+
+</html>
