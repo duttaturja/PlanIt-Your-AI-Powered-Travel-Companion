@@ -1,0 +1,20 @@
+{% if messages %}
+<div id="message-popup"
+    class="fixed bottom-0 right-0 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg shadow-lg m-4"
+    role="alert">
+    <strong class="font-bold">Messages:</strong>
+    <ul class="list-disc pl-5">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<script>
+    setTimeout(function () {
+        var popup = document.getElementById('message-popup');
+        if (popup) {
+            popup.style.display = 'none';
+        }
+    }, 20000); // 20000 milliseconds = 20 seconds
+</script>
+{% endif %}
