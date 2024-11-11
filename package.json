@@ -15,7 +15,7 @@
     "url": "https://github.com/duttaturja/PlanIT-Your-AI-Powered-Travel-Companion/issues"
   },
   "homepage": "https://github.com/duttaturja/PlanIT-Your-AI-Powered-Travel-Companion#readme",
-    "devDependencies": {
+  "devDependencies": {
     "concurrently": "^9.0.1",
     "tailwindcss": "^3.4.11"
   }

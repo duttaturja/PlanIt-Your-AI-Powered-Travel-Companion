@@ -1,150 +1,351 @@
-<!DOCTYPE html>
-<html lang="en" class="light">
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body {
+        background-color: #f7fafc; 
+        color: #1a202c; 
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Frontend</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#1a1a1a',
-                        darkSecondary: '#2d2d2d',
-                        darkInput: '#3d3d3d',
-                        darkBorder: '#4d4d4d'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Dark mode styles */
-        .dark body {
-            background-color: var(--darkBg);
-            color: #ffffff;
-        }
+    .chat-container {
+        background-color: #ffffff; 
+    }
 
-        .dark .chat-container {
-            background-color: var(--darkSecondary);
-        }
+    .sidebar {
+        background-color: #ffffff; 
+        width: 250px; 
+        border-right: 1px solid #e2e8f0; 
+        padding: 20px; 
+        height: 100vh; 
+        position: fixed; 
+        overflow-y: auto; 
+        left: 0;
+        top: 0;
+        padding-top: 40px;
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease; 
+        z-index: 999; 
+    }
 
-        .dark .message-input {
-            background-color: var(--darkInput);
-            color: #ffffff;
-            border-color: var(--darkBorder);
-        }
+    .sidebar.active {
+        transform: translateX(0);
+    }
 
-        .dark .bot-message {
-            background-color: var(--darkInput);
-        }
+    .sidebar-toggler {
+        position: fixed; 
+        left: 30px; 
+        top: 15px; 
+        background-color: #ffffff; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 5px; 
+        padding: 15px; 
+        cursor: pointer; 
+        z-index: 1000; 
+        transition: background-color 0.3s; 
+    }
 
-        .dark .user-message {
-            background-color: #0066cc;
-        }
+    .sidebar-toggler:hover {
+        background-color: #f0f0f0; 
+    }
 
-        /* Scrollbar styling */
-        #chatMessages::-webkit-scrollbar {
-            width: 6px;
-        }
+    .message-input {
+        background-color: #ffffff; 
+        border: 1px solid #e2e8f0;
+        color: #1a202c; 
+        border-color: #cbd5e0; 
+    }
 
-        #chatMessages::-webkit-scrollbar-track {
-            background: transparent;
-        }
+    .bot-message {
+        background-color: #f7fafc; 
+    }
 
-        #chatMessages::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-        }
+    .user-message {
+        background-color: #0066cc; 
+    }
 
-        #chatMessages::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
+    #chatMessages::-webkit-scrollbar {
+        width: 6px;
+    }
 
-        /* Message animation */
-        .message-animation {
-            animation: slideIn 0.3s ease-out;
-        }
+    #chatMessages::-webkit-scrollbar-track {
+        background: transparent;
+    }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+    #chatMessages::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    #chatMessages::-webkit-scrollbar-thumb:hover {
+        background: #666;
+    }
 
-        /* Loading dots animation */
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            padding: 8px 16px;
-            background: #f0f0f0;
-            border-radius: 20px;
-            width: fit-content;
-        }
+    .message-animation {
+        animation: slideIn 0.3s ease-out;
+    }
 
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #666;
-            border-radius: 50%;
-            animation: typingDot 1s infinite ease-in-out;
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 8px 16px;
+        background: #f0f0f0;
+        border-radius: 20px;
+        width: fit-content;
+    }
+
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #666;
+        border-radius: 50%;
+        animation: typingDot 1s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typingDot {
+        0%,
+        100% {
+            transform: translateY(0);
         }
 
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
+        50% {
+            transform: translateY(-4px);
+        }
+    }
+
+    .profile-section {
+        position: absolute; 
+        right: 20px; 
+        top: 20px; 
+        z-index: 1000; 
+    }
+
+    .profile-button {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .profile-button img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .dropdown {
+        display: none;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        right: 0;
+        top: 60px;
+        z-index: 1000;
+    }
+
+    .dropdown-item {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f0f0f0;
+    }
+
+    .dropdown-header {
+        padding: 10px 20px;
+        font-weight: bold;
+        align-items: center;
+    }
+
+    .previous-chats {
+        margin-top: 20px;
+    }
+
+    .chat-item {
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin-bottom: 2px;
+    }
+
+    .chat-item:hover {
+        background-color: #f0f0f0;
+    }
+
+    .chat-item.active {
+        background-color: #e2e8f0;
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s;
+    }
+
+    .overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px; 
         }
 
-        @keyframes typingDot {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-4px);
-            }
+        .chat-container {
+            margin-left: 0; 
         }
 
-        .dark .typing-indicator {
-            background: var(--darkInput);
+        .sidebar-toggler {
+            left: 10px; 
+            top: 10px; 
         }
 
-        .dark .typing-dot {
-            background: #fff;
+        .profile-section {
+            right: 10px; 
+            top: 10px; 
         }
-    </style>
-</head>
 
-<body class="bg-gray-100 dark:bg-darkBg transition-colors duration-300">
+        .chat-item {
+            font-size: 14px; 
+        }
+
+        .dropdown-header {
+            font-size: 16px; 
+        }
+        .header {
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .profile-button {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        
+        .sidebar {
+            width: 100dvw; 
+            height: auto; 
+            position: absolute;
+            padding: 0;
+            transform: none;
+        }
+
+        .chat-container {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .sidebar-toggler {
+            display: none; 
+        }
+
+        .profile-section {
+            right: 10px; 
+            top: 10px; 
+        }
+
+        .header {
+            justify-content: center;
+        }
+    }
+
+</style>
+{% endblock head %} 
+{% block body %}
+
+<div class="bg-gray-100 flex">
     <div class="container mx-auto p-4 max-w-4xl">
-        <!-- Header with Dark Mode Toggle -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">PlanIt</h1>
-            <button id="darkModeToggle"
-                class="px-5 py-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-                <i class="fas fa-sun text-yellow-500 text-xl dark:hidden"></i>
-                <i class="fas fa-moon text-blue-300 text-xl hidden dark:block"></i>
+
+        <!-- Sidebar Toggler -->
+        <div class="sidebar-toggler" id="sidebarToggler" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </div>
+    
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Chat Navigation">
+            
+            <h3 class="text-lg font-bold mt-12">Previous Chats</h3>
+            <div class="previous-chats">
+                <div class="chat-item active">Chat with Bot - 2023-10-01</div>
+                <div class="chat-item">Chat with Bot - 2023-09-30</div>
+                <div class="chat-item">Chat with Bot - 2023-09-29</div>
+                <div class="chat-item">Chat with Bot - 2023-09-28</div>
+                <div class="chat-item">Chat with Bot - 2023-09-27</div>
+            </div>
+        </aside>
+        <!-- Overlay -->
+        <div class="overlay"></div>
+        <!-- Profile Button Dropdown-->
+        <div class="profile-section">
+            <button class="profile-button" id="profileButton" aria-haspopup="true" aria-expanded="false">
+                <img src="https://via.placeholder.com/50" alt="Profile Picture">
             </button>
+            <div class="dropdown" id="profileDropdown" aria-labelledby="profileButton">
+                <div class="dropdown-header">
+                    <h2 class="text-lg font-bold">User Name</h2>
+                    <p class="text-sm text-gray-600">user@example.com</p>
+                </div>
+                <div class="dropdown-item" role="menuitem"><i class="fas fa-user"></i><span>Profile</span></div>
+                <div class="dropdown-item" role="menuitem"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
+            </div>
+        </div>
+
+
+        <!-- Header -->
+        <div class="header">
+            <h1 class="text-3xl font-bold text-gray-800">PlanIt</h1>
         </div>
 
         <!-- Chat Container -->
-        <div
-            class="chat-container bg-white dark:bg-darkSecondary rounded-xl shadow-lg p-4 transition-colors duration-300">
+        <div class="chat-container bg-white rounded-xl shadow-lg p-4">
             <!-- Chat Messages -->
             <div id="chatMessages" class="h-[500px] overflow-y-auto mb-4 p-2 scroll-smooth">
                 <!-- Messages will be inserted here -->
@@ -153,44 +354,26 @@
             <!-- Input Area -->
             <div class="flex gap-2">
                 <input type="text" id="userInput"
-                    class="message-input flex-grow p-3 border rounded-lg dark:bg-darkInput dark:text-white dark:border-darkBorder focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    class="message-input flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                     placeholder="Type your message...">
                 <button id="sendButton"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <span>Send</span>
                     <i class="fas fa-paper-plane"></i>
                 </button>
-            </div>
+            </div>         
         </div>
     </div>
-
+    <!-- Scripts -->
     <script>
-        // Check for system dark mode preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
-
-        // Check for saved theme preference
-        if (localStorage.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else if (localStorage.theme === 'light') {
-            document.documentElement.classList.remove('dark');
-        }
-
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        });
-
-        // Rest of your existing JavaScript code...
-
-
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
-
-        // (Chat functionality remains the same)
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggler = document.getElementById('sidebarToggler');
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const overlay = document.querySelector('.overlay');
 
         // Add typing indicator
         function showTypingIndicator() {
@@ -226,11 +409,11 @@
 
             const nameElement = document.createElement('span');
             nameElement.textContent = users[sender].name;
-            nameElement.classList.add('font-bold', 'mb-1', 'dark:text-white');
+            nameElement.classList.add('font-bold', 'mb-1');
 
             const textElement = document.createElement('p');
             textElement.textContent = message;
-            textElement.classList.add('bg-gray-100', 'dark:bg-gray-700', 'rounded-lg', 'p-2', 'dark:text-white');
+            textElement.classList.add('bg-gray-100', 'rounded-lg', 'p-2');
 
             contentElement.appendChild(nameElement);
             contentElement.appendChild(textElement);
@@ -264,7 +447,7 @@
 
                 setTimeout(() => {
                     typingIndicator.remove();
-                    addMessage('bot', 'Gawk Gawk');
+                    addMessage('bot', 'Get Help');
                     userInput.disabled = false;
                     sendButton.disabled = false;
                     userInput.focus();
@@ -274,7 +457,51 @@
 
         // Initial message
         addMessage('bot', 'Hello! How can I assist you today?');
-    </script>
-</body>
 
-</html>
+        // Sidebar toggler functionality
+        sidebarToggler.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            
+            const isActive = sidebar.classList.contains('active');
+            if (window.innerWidth>=768) {
+                const marginLeft = isActive ? '270px' : '20px';
+                overlay.classList.toggle('active');
+                overlay.style.opacity = 0;
+                document.querySelector('.chat-container').style.marginLeft = marginLeft;
+            }
+            else {
+                overlay.classList.toggle('active');
+                overlay.style.opacity = 1;
+                profileButton.style.display = isActive ? 'block' : 'none';
+            }
+            
+            sidebarToggler.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; 
+            sidebarToggler.setAttribute('aria-expanded', isActive); 
+        });
+
+        //Closing sidebar when overlay is clicked
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.querySelector('.chat-container').style.marginLeft = '20px';
+            sidebarToggler.innerHTML = '<i class="fas fa-bars"></i>';
+            sidebarToggler.setAttribute('aria-expanded', 'false');
+        });
+        
+        // Profile button functionality
+        profileButton.addEventListener('click', () => {
+            const isExpanded = profileButton.getAttribute('aria-expanded') === 'true';
+            profileButton.setAttribute('aria-expanded', !isExpanded);
+            profileDropdown.style.display = isExpanded ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (event) => {
+            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.style.display = 'none';
+                profileButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+    </script>
+</div>
+{% endblock body %}
