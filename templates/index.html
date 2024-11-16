@@ -56,9 +56,14 @@
                     </form>
                 </div>
                 {% else %}
-                <div class="p-4">
-                    <p class="text-sm text-gray-500">Please <a href="{% url 'account_login' %}"
-                           class="text-indigo-600 hover:text-indigo-500">login</a> to view your account information.</p>
+                <div class="p-4 text-center">
+                    <p class="text-sm text-gray-500">
+                        Please
+                        <a href="{% url 'account_login' %}" class="text-indigo-600 hover:text-indigo-500 font-semibold">
+                            login
+                        </a>
+                        to view your account information.
+                    </p>
                 </div>
                 {% endif %}
             </div>
