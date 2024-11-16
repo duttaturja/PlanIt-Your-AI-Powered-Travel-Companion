@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock head %}
+{% block title %}Welcome{% endblock title %}
+{% block body %}
+
+<div class="bg-gray-100 flex">
+    <div class="container mx-auto p-4 max-w-4xl">
+
+        <!-- Sidebar Toggler -->
+        <div id="sidebarToggler"
+             class="fixed top-4 left-4 bg-white border border-gray-300 rounded-md p-3 cursor-pointer shadow-md transition hover:bg-gray-100">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+               class="fixed top-0 left-0 w-64 bg-white h-screen shadow-lg transform -translate-x-full transition-transform duration-300 z-40 overflow-y-auto">
+            <h3 class="text-lg font-bold mt-16 px-4">Previous Chats</h3>
+            <div class="mt-4 px-4 space-y-2">
+                <div class="p-2 rounded-md bg-gray-200 cursor-pointer">Chat with Bot - 2023-10-01</div>
+                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-30</div>
+                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-29</div>
+            </div>
+        </aside>
+
+        <!-- Overlay -->
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+
+        <!-- Profile Button Dropdown -->
+        <div class="absolute top-4 right-4">
+            <button id="profileButton" class="relative flex items-center space-x-2 focus:outline-none">
+                <img src="https://via.placeholder.com/50" alt="Profile Picture"
+                     class="w-12 h-12 rounded-full shadow-md">
+            </button>
+            <div id="profileDropdown"
+                 class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg hidden z-50">
+                {% if user.is_authenticated %}
+                <div class="p-4">
+                    <h2 class="text-lg font-semibold">{{ user.username }}</h2>
+                    <p class="text-sm text-gray-500">{{ user.email }}</p>
+                </div>
+                <div class="border-t">
+                    <a href="{% url 'core:profile' %}"
+                       class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
+                        <i class="fas fa-user"></i><span>Profile</span>
+                    </a>
+                    <form method="post" action="{% url 'account_logout' %}"
+                          class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
+                        {% csrf_token %}
+                        <button type="submit" class="flex items-center space-x-2">
+                            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="p-4 text-center">
+                    <p class="text-sm text-gray-500">
+                        Please
+                        <a href="{% url 'account_login' %}" class="text-indigo-600 hover:text-indigo-500 font-semibold">
+                            login
+                        </a>
+                        to view your account information.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="text-center mt-8">
+            <h1 class="text-4xl font-bold text-gray-800">PlanIt</h1>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="bg-white rounded-lg shadow-md mt-6 p-4">
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="h-96 overflow-y-auto p-4 border border-gray-200 rounded-md">
+                <!-- Messages will appear here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="mt-4 flex gap-2">
+                <input id="userInput" type="text"
+                       class="flex-grow p-3 border rounded-md focus:ring-2 focus:ring-blue-400"
+                       placeholder="Type your message...">
+                <button id="sendButton"
+                        class="bg-blue-500 text-white px-6 py-2 rounded-md shadow hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'chat.js' %}" defer></script>
+{% endblock body %}

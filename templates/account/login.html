@@ -12,12 +12,10 @@ Login
         <h1 class="text-2xl font-bold mb-4 text-center">Sign In</h1>
         <p class="text-center mb-6">
                 If you have not created an account yet <br> then please
-                <a href="{% url 'account_signup' %}"
-                        class="text-blue-500 hover:underline">sign up
+                <a href="{% url 'account_signup' %}" class="text-blue-500 hover:underline">sign up
                 </a>first.
         </p>
-        <form method="post"
-                action="{% url 'account_login' %}">
+        <form method="post" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 <div class="mb-4">
                         {% if form.login.errors %}
@@ -30,55 +28,23 @@ Login
                         </div>
                         {% endfor %}
                         {% endif %}
-                        <label for="id_login"
-                                class="block text-sm font-medium text-gray-700">Email
+                        <label for="id_login" class="block text-sm font-medium text-gray-700">Email
                         </label>
-                        {% render_field form.login class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" field="email" %}
+                        {% render_field form.login class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm                        p-2" field="email" %}
                 </div>
                 <div class="mb-4">
 
-                        <label for="id_password"
-                                class="block text-sm font-medium text-gray-700">Password
+                        <label for="id_password" class="block text-sm font-medium text-gray-700">Password
                         </label>
-                        {% render_field form.password class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" field="password" %}
+                        {% render_field form.password class="mt-1 block w-full border border-gray-300 rounded-md                        shadow-sm p-2" field="password" %}
                 </div>
                 <button type="submit"
                         class="w-full bg-blue-600 text-white p-3 rounded-md text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Login
                 </button>
         </form>
         <p class="text-center mt-4 text-sm text-gray-600">
-                <a href="{% url 'account_reset_password' %}"
-                        class="text-blue-500 hover:underline">Forgot Password?
+                <a href="{% url 'account_reset_password' %}" class="text-blue-500 hover:underline">Forgot Password?
                 </a>
         </p>
-        <!-- <hr class="my-6"> -->
-        <!-- <h2 class="text-lg font-semibold mb-4 text-center">
-                Or use a third-party</h2>
-        <ul class="space-y-2">
-                <li><a href="/accounts/amazon/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Amazon</a>
-                </li>
-                <li><a href="/accounts/facebook/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Facebook</a>
-                </li>
-                <li><a href="/accounts/github/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">GitHub</a>
-                </li>
-                <li><a href="/accounts/google/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Google</a>
-                </li>
-                <li><a href="/accounts/lichess/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Lichess</a>
-                </li>
-                <li><a href="/accounts/microsoft/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Microsoft</a>
-                </li>
-                <li><a href="/accounts/telegram/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Telegram</a>
-                </li>
-                <li><a href="/accounts/twitch/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Twitch</a>
-                </li>
-        </ul> -->
 </div>
 {% endblock %}
