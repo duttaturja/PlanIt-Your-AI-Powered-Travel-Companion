@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class TravelAgent:
 
     def __init__(self):
-        self.llm = OllamaLLM(model="hf.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF")
+        self.llm = OllamaLLM(model="llama3.2:1b")
         self.memory = ConversationBufferMemory(
             return_messages=True,
             memory_key="chat_history"
