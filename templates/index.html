@@ -2,97 +2,191 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .chat-message {
+        padding: 1.5rem 0;
+        animation: fadeIn 0.3s ease-in;
+    }
+    
+    .user-message {
+        background-color: white;
+    }
+    
+    .assistant-message {
+        background-color: #f7f7f8;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .typing-indicator::after {
+        content: '...';
+        animation: typing 1s infinite;
+    }
+    
+    @keyframes typing {
+        0% { content: '.'; }
+        33% { content: '..'; }
+        66% { content: '...'; }
+    }
+</style>
 {% endblock head %}
-{% block title %}Welcome{% endblock title %}
+{% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
 {% block body %}
 
-<div class="bg-gray-100 flex">
-    <div class="container mx-auto p-4 max-w-4xl">
-
-        <!-- Sidebar Toggler -->
-        <div id="sidebarToggler"
-             class="fixed top-4 left-4 bg-white border border-gray-300 rounded-md p-3 cursor-pointer shadow-md transition hover:bg-gray-100">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar"
-               class="fixed top-0 left-0 w-64 bg-white h-screen shadow-lg transform -translate-x-full transition-transform duration-300 z-40 overflow-y-auto">
-            <h3 class="text-lg font-bold mt-16 px-4">Previous Chats</h3>
-            <div class="mt-4 px-4 space-y-2">
-                <div class="p-2 rounded-md bg-gray-200 cursor-pointer">Chat with Bot - 2023-10-01</div>
-                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-30</div>
-                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-29</div>
-            </div>
-        </aside>
-
-        <!-- Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
-
-        <!-- Profile Button Dropdown -->
-        <div class="absolute top-4 right-4">
-            <button id="profileButton" class="relative flex items-center space-x-2 focus:outline-none">
-                <img src="https://via.placeholder.com/50" alt="Profile Picture"
-                     class="w-12 h-12 rounded-full shadow-md">
+<div class="flex h-screen bg-white">
+    <!-- Sidebar -->
+    <div id="sidebar" class="hidden md:flex md:flex-col md:w-[260px] bg-gray-50 border-r border-gray-200">
+        <!-- New Chat Button -->
+        <div class="p-4">
+            <button onclick="startNewChat()" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors">
+                <i class="fas fa-plus"></i>
+                <span>New Trip Plan</span>
             </button>
-            <div id="profileDropdown"
-                 class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg hidden z-50">
-                {% if user.is_authenticated %}
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold">{{ user.username }}</h2>
-                    <p class="text-sm text-gray-500">{{ user.email }}</p>
+        </div>
+
+        <!-- Previous Chats -->
+        <div class="flex-1 overflow-y-auto">
+            <div class="px-4 py-2">
+                <h3 class="text-xs uppercase text-gray-500 font-medium">Previous Plans</h3>
+                <div class="mt-2 space-y-2">
+                    <!-- Previous chat items will be dynamically added here -->
                 </div>
-                <div class="border-t">
-                    <a href="{% url 'core:profile' %}"
-                       class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
-                        <i class="fas fa-user"></i><span>Profile</span>
-                    </a>
-                    <form method="post" action="{% url 'account_logout' %}"
-                          class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
-                        {% csrf_token %}
-                        <button type="submit" class="flex items-center space-x-2">
-                            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+            </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="border-t border-gray-200 p-4">
+            {% if user.is_authenticated %}
+            <div class="flex items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=random" alt="Profile" class="w-8 h-8 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-700">{{ user.username }}</p>
+                    <p class="text-xs text-gray-500">{{ user.email }}</p>
+                </div>
+                <form method="post" action="{% url 'account_logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <a href="{% url 'account_login' %}" class="block text-center py-2 px-4 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">
+                Sign In
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="flex-1 flex flex-col">
+        <!-- Mobile Header -->
+        <div class="md:hidden flex items-center justify-between p-4 border-b border-gray-200">
+            <button id="mobileSidebarToggle" class="p-2 hover:bg-gray-100 rounded-md">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-xl font-semibold">PlanIt</h1>
+            <div class="w-8"></div> <!-- Spacer for alignment -->
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div id="chatMessages" class="flex-1 overflow-y-auto px-4 py-2">
+            <!-- Welcome Message -->
+            <div class="max-w-2xl mx-auto py-8 text-center">
+                <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 class="mt-4 text-2xl font-semibold text-gray-700">Welcome to PlanIt</h2>
+                <p class="mt-2 text-gray-500">Your AI-powered travel companion. How can I help plan your next adventure?</p>
+                
+                <!-- Quick Start Suggestions -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
+                    <button onclick="suggestPrompt(this)" class="suggestion-btn p-4 text-left rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <p class="font-medium text-gray-700">Plan a weekend getaway</p>
+                        <p class="text-sm text-gray-500">"I want to plan a relaxing weekend trip"</p>
+                    </button>
+                    <button onclick="suggestPrompt(this)" class="suggestion-btn p-4 text-left rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <p class="font-medium text-gray-700">Find budget-friendly destinations</p>
+                        <p class="text-sm text-gray-500">"Show me affordable travel destinations"</p>
+                    </button>
+                    <button onclick="suggestPrompt(this)" class="suggestion-btn p-4 text-left rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <p class="font-medium text-gray-700">Explore adventure activities</p>
+                        <p class="text-sm text-gray-500">"What adventure activities can I do in [place]?"</p>
+                    </button>
+                    <button onclick="suggestPrompt(this)" class="suggestion-btn p-4 text-left rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <p class="font-medium text-gray-700">Create a travel itinerary</p>
+                        <p class="text-sm text-gray-500">"Help me create a 5-day itinerary"</p>
+                    </button>
+                </div>
+            </div>
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="border-t border-gray-200 p-4">
+            <div class="max-w-3xl mx-auto">
+                <form id="chatForm" class="flex items-end gap-3">
+                    <div class="flex-1 min-h-[20px] relative">
+                        <textarea
+                            id="userInput"
+                            rows="1"
+                            class="w-full resize-none rounded-lg border border-gray-200 pl-4 pr-12 py-3 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                            placeholder="Message PlanIt..."
+                            style="max-height: 200px;"
+                        ></textarea>
+                        <button
+                            id="sendButton"
+                            type="submit"
+                            class="absolute right-2 bottom-2.5 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed p-1"
+                            disabled
+                        >
+                            <i class="fas fa-paper-plane"></i>
                         </button>
-                    </form>
-                </div>
-                {% else %}
-                <div class="p-4 text-center">
-                    <p class="text-sm text-gray-500">
-                        Please
-                        <a href="{% url 'account_login' %}" class="text-indigo-600 hover:text-indigo-500 font-semibold">
-                            login
-                        </a>
-                        to view your account information.
-                    </p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Header -->
-        <div class="text-center mt-8">
-            <h1 class="text-4xl font-bold text-gray-800">PlanIt</h1>
-        </div>
-
-        <!-- Chat Container -->
-        <div class="bg-white rounded-lg shadow-md mt-6 p-4">
-            <!-- Chat Messages -->
-            <div id="chatMessages" class="h-96 overflow-y-auto p-4 border border-gray-200 rounded-md">
-                <!-- Messages will appear here -->
-            </div>
-
-            <!-- Input Area -->
-            <div class="mt-4 flex gap-2">
-                <input id="userInput" type="text"
-                       class="flex-grow p-3 border rounded-md focus:ring-2 focus:ring-blue-400"
-                       placeholder="Type your message...">
-                <button id="sendButton"
-                        class="bg-blue-500 text-white px-6 py-2 rounded-md shadow hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                    </div>
+                </form>
+                <p class="mt-2 text-xs text-center text-gray-500">
+                    PlanIt may produce inaccurate information. Consider checking important details.
+                </p>
             </div>
         </div>
     </div>
 </div>
-<script src="{% static 'chat.js' %}" defer></script>
+
+<script>
+    // Auto-resize textarea
+    const textarea = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        sendButton.disabled = !this.value.trim();
+    });
+
+    // Mobile sidebar toggle
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    mobileSidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+    });
+
+    // Suggestion prompt handler
+    function suggestPrompt(button) {
+        const promptText = button.querySelector('p:last-child').textContent.replace(/['"]/g, '');
+        textarea.value = promptText;
+        textarea.focus();
+        textarea.dispatchEvent(new Event('input'));
+    }
+
+    // New chat handler
+    function startNewChat() {
+        // Clear chat messages
+        const chatMessages = document.getElementById('chatMessages');
+        // Add implementation here
+    }
+</script>
 {% endblock body %}
