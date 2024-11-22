@@ -1,50 +1,101 @@
 {% extends 'layouts/base.html' %}
-{% load widget_tweaks %}
+{% load static %}
+{% load account socialaccount %}
 
-{% block title %}
-Login
-{{ block.super }}
-{% endblock title %}
+{% block title %}Sign In{% endblock %}
 
 {% block content %}
-<div class="max-w-md w-full bg-gray-100 p-6 border rounded-lg">
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
+    <div class="max-w-md w-full space-y-8 bg-card p-8 rounded-lg border border-border">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-bold text-copy-primary">
+                Sign In
+            </h2>
+            <p class="mt-2 text-center text-copy-secondary">
+                Welcome back! Please sign in to your account.
+            </p>
+        </div>
 
-        <h1 class="text-2xl font-bold mb-4 text-center">Sign In</h1>
-        <p class="text-center mb-6">
-                If you have not created an account yet <br> then please
-                <a href="{% url 'account_signup' %}" class="text-blue-500 hover:underline">sign up
-                </a>first.
-        </p>
-        <form method="post" action="{% url 'account_login' %}">
-                {% csrf_token %}
-                <div class="mb-4">
-                        {% if form.login.errors %}
-                        {% for error in form.login.errors %}
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                                <strong class="font-bold">Error:</strong>
-                                <ul class="list-disc pl-5">
-                                        <li>{{ error }}</li>
-                                </ul>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        <label for="id_login" class="block text-sm font-medium text-gray-700">Email
-                        </label>
-                        {% render_field form.login class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm                        p-2" field="email" %}
+        {% get_providers as socialaccount_providers %}
+        {% if socialaccount_providers %}
+        <div class="flex flex-col space-y-3">
+            {% for provider in socialaccount_providers %}
+            <a href="{% provider_login_url provider.id process='login' %}"
+                class="flex items-center justify-center px-4 py-2 border border-border rounded-md text-copy-primary hover:bg-background transition-colors">
+                <img src="{% static 'images/'|add:provider.name|add:'.svg' %}" alt="{{ provider.name }}" class="h-5 w-5 mr-2">
+                Continue with {{ provider.name }}
+            </a>
+            {% endfor %}
+            <div class="relative my-4">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-border"></div>
                 </div>
-                <div class="mb-4">
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-card text-copy-secondary">Or continue with email</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-                        <label for="id_password" class="block text-sm font-medium text-gray-700">Password
-                        </label>
-                        {% render_field form.password class="mt-1 block w-full border border-gray-300 rounded-md                        shadow-sm p-2" field="password" %}
+        <form class="mt-8 space-y-6" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+
+            <div class="rounded-md shadow-sm space-y-4">
+                <div>
+                    <label for="id_login" class="sr-only">Email address</label>
+                    <input id="id_login" name="login" type="email" autocomplete="email" required
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                        placeholder="Email address">
                 </div>
+                <div>
+                    <label for="id_password" class="sr-only">Password</label>
+                    <input id="id_password" name="password" type="password" autocomplete="current-password" required
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                        placeholder="Password">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember" name="remember" type="checkbox"
+                        class="h-4 w-4 text-cta focus:ring-cta border-border rounded bg-background">
+                    <label for="remember" class="ml-2 block text-sm text-copy-secondary">
+                        Remember me
+                    </label>
+                </div>
+
+                <div class="text-sm">
+                    <a href="{% url 'account_reset_password' %}" class="font-medium text-cta hover:text-cta-active">
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+
+            <div>
                 <button type="submit"
-                        class="w-full bg-blue-600 text-white p-3 rounded-md text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Login
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-cta-text bg-cta hover:bg-cta-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    Sign in
                 </button>
+            </div>
         </form>
-        <p class="text-center mt-4 text-sm text-gray-600">
-                <a href="{% url 'account_reset_password' %}" class="text-blue-500 hover:underline">Forgot Password?
-                </a>
+
+        <p class="mt-8 text-center text-sm text-copy-secondary">
+            Don't have an account?
+            <a href="{{ signup_url }}" class="font-medium text-cta hover:text-cta-active">
+                Sign up
+            </a>
         </p>
+    </div>
 </div>
 {% endblock %}

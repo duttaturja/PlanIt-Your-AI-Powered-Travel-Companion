@@ -1,98 +1,171 @@
 {% extends "base.html" %}
 {% load static %}
-{% block head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-{% endblock head %}
-{% block title %}Welcome{% endblock title %}
+
+{% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
+
 {% block body %}
-
-<div class="bg-gray-100 flex">
-    <div class="container mx-auto p-4 max-w-4xl">
-
-        <!-- Sidebar Toggler -->
-        <div id="sidebarToggler"
-             class="fixed top-4 left-4 bg-white border border-gray-300 rounded-md p-3 cursor-pointer shadow-md transition hover:bg-gray-100">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <!-- Sidebar -->
-        <aside id="sidebar"
-               class="fixed top-0 left-0 w-64 bg-white h-screen shadow-lg transform -translate-x-full transition-transform duration-300 z-40 overflow-y-auto">
-            <h3 class="text-lg font-bold mt-16 px-4">Previous Chats</h3>
-            <div class="mt-4 px-4 space-y-2">
-                <div class="p-2 rounded-md bg-gray-200 cursor-pointer">Chat with Bot - 2023-10-01</div>
-                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-30</div>
-                <div class="p-2 rounded-md hover:bg-gray-200 cursor-pointer">Chat with Bot - 2023-09-29</div>
-            </div>
-        </aside>
-
-        <!-- Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
-
-        <!-- Profile Button Dropdown -->
-        <div class="absolute top-4 right-4">
-            <button id="profileButton" class="relative flex items-center space-x-2 focus:outline-none">
-                <img src="https://via.placeholder.com/50" alt="Profile Picture"
-                     class="w-12 h-12 rounded-full shadow-md">
-            </button>
-            <div id="profileDropdown"
-                 class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg hidden z-50">
-                {% if user.is_authenticated %}
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold">{{ user.username }}</h2>
-                    <p class="text-sm text-gray-500">{{ user.email }}</p>
-                </div>
-                <div class="border-t">
-                    <a href="{% url 'core:profile' %}"
-                       class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
-                        <i class="fas fa-user"></i><span>Profile</span>
-                    </a>
-                    <form method="post" action="{% url 'account_logout' %}"
-                          class="block p-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
-                        {% csrf_token %}
-                        <button type="submit" class="flex items-center space-x-2">
-                            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
-                        </button>
-                    </form>
-                </div>
-                {% else %}
-                <div class="p-4 text-center">
-                    <p class="text-sm text-gray-500">
-                        Please
-                        <a href="{% url 'account_login' %}" class="text-indigo-600 hover:text-indigo-500 font-semibold">
-                            login
-                        </a>
-                        to view your account information.
-                    </p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Header -->
-        <div class="text-center mt-8">
-            <h1 class="text-4xl font-bold text-gray-800">PlanIt</h1>
-        </div>
-
+<div class="min-h-screen bg-gradient-to-b from-background to-card">
+    <div class="max-w-4xl mx-auto px-4 py-8">
         <!-- Chat Container -->
-        <div class="bg-white rounded-lg shadow-md mt-6 p-4">
-            <!-- Chat Messages -->
-            <div id="chatMessages" class="h-96 overflow-y-auto p-4 border border-gray-200 rounded-md">
-                <!-- Messages will appear here -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-accent p-4 text-white">
+                <div class="flex items-center gap-3">
+                    <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Logo" class="w-10 h-10 rounded-full">
+                    <div>
+                        <h1 class="text-xl font-bold">PlanIt</h1>
+                        <p class="text-sm opacity-90">Your AI Travel Companion</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="h-[60vh] overflow-y-auto p-4 space-y-4" id="messages">
+                {% if not messages %}
+                    <!-- Welcome Message -->
+                    <div class="bg-background rounded-lg p-6 shadow-sm">
+                        <h2 class="text-2xl font-bold text-accent mb-4">Welcome to PlanIt!</h2>
+                        <p class="text-gray-600 mb-6">Ready to plan your next adventure? Here are some ways I can help:</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <form method="POST" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="message" value="Plan a weekend getaway to a nearby city with cultural attractions">
+                                <button type="submit" 
+                                    class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
+                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                    <div class="font-semibold text-accent">Weekend Getaway</div>
+                                    <p class="text-sm text-gray-600 mt-1">Discover a perfect weekend escape</p>
+                                </button>
+                            </form>
+
+                            <form method="POST" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="message" value="Suggest an adventurous 1-week itinerary in Costa Rica">
+                                <button type="submit"
+                                    class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
+                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                    <div class="font-semibold text-accent">Adventure Trip</div>
+                                    <p class="text-sm text-gray-600 mt-1">Plan an exciting adventure abroad</p>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">{{ error }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% for message in messages %}
+                    <div class="flex {% if message.role == 'user' %}justify-end{% endif %} items-start gap-2 animate-fade-in">
+                        {% if message.role != 'user' %}
+                            <img src="{% static 'images/planit-avatar.png' %}" 
+                                 alt="PlanIt" 
+                                 class="w-8 h-8 rounded-full">
+                        {% endif %}
+                        
+                        <div class="{% if message.role == 'user' %}bg-accent text-white{% else %}bg-gray-100 text-gray-800{% endif %} 
+                                    rounded-2xl px-4 py-2 max-w-[80%] shadow-sm">
+                            <p class="whitespace-pre-wrap">{{ message.content }}</p>
+                        </div>
+
+                        {% if message.role == 'user' %}
+                            <img src="https://ui-avatars.com/api/?background=random" 
+                                 alt="You" 
+                                 class="w-8 h-8 rounded-full">
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
 
             <!-- Input Area -->
-            <div class="mt-4 flex gap-2">
-                <input id="userInput" type="text"
-                       class="flex-grow p-3 border rounded-md focus:ring-2 focus:ring-blue-400"
-                       placeholder="Type your message...">
-                <button id="sendButton"
-                        class="bg-blue-500 text-white px-6 py-2 rounded-md shadow hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+            <div class="border-t border-gray-200 p-4 bg-white">
+                <form method="POST" class="relative">
+                    {% csrf_token %}
+                    <textarea name="message" 
+                            rows="3"
+                            class="w-full px-4 py-3 pr-12 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white resize-none"
+                            placeholder="Ask me about your travel plans..."
+                            required></textarea>
+                    <button type="submit"
+                            class="absolute right-3 bottom-3 p-2 text-white bg-accent rounded-full hover:bg-accent-dark transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                        </svg>
+                    </button>
+                </form>
+                <p class="mt-2 text-xs text-center text-gray-500">
+                    Always verify important travel details and requirements.
+                </p>
             </div>
         </div>
     </div>
 </div>
-<script src="{% static 'chat.js' %}" defer></script>
+
+<style>
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth scrollbar */
+#messages {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+#messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+/* Textarea autoresize */
+textarea {
+    min-height: 60px;
+    max-height: 150px;
+}
+</style>
+
+<script>
+// Auto-scroll to bottom of messages
+const messages = document.getElementById('messages');
+messages.scrollTop = messages.scrollHeight;
+
+// Auto-resize textarea
+const textarea = document.querySelector('textarea');
+textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+</script>
 {% endblock body %}

@@ -1,3 +1,106 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Default Theme with System Preference Support */
+  :root {
+    --background: 255, 255, 255;      /* White */
+    --card: 249, 250, 251;           /* Gray 50 */
+    --border: 229, 231, 235;         /* Gray 200 */
+    --copy-primary: 17, 24, 39;      /* Gray 900 */
+    --copy-secondary: 75, 85, 99;    /* Gray 600 */
+    --cta: 79, 70, 229;             /* Indigo 600 */
+    --cta-active: 67, 56, 202;      /* Indigo 700 */
+    --cta-text: 255, 255, 255;      /* White */
+    --accent: 99, 102, 241;         /* Indigo 500 */
+    --github-icon-filter: none;      /* Default black icon for light mode */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 17, 24, 39;        /* Gray 900 */
+      --card: 31, 41, 55;             /* Gray 800 */
+      --border: 55, 65, 81;           /* Gray 700 */
+      --copy-primary: 243, 244, 246;  /* Gray 100 */
+      --copy-secondary: 209, 213, 219; /* Gray 300 */
+      --cta: 129, 140, 248;          /* Indigo 400 */
+      --cta-active: 99, 102, 241;    /* Indigo 500 */
+      --cta-text: 17, 24, 39;        /* Gray 900 */
+      --accent: 167, 139, 250;       /* Indigo 300 */
+      --github-icon-filter: invert(1);  /* Inverted to white for dark mode */
+    }
+  }
+
+  .github-icon {
+    filter: var(--github-icon-filter);
+    transition: filter 0.3s ease;
+  }
+}
+
+@layer components {
+  .nav-link {
+    @apply px-3 py-2 rounded-md transition-all duration-200;
+  }
+  
+  .nav-link:hover {
+    @apply bg-opacity-10 bg-copy-primary;
+  }
+  
+  .nav-link.active {
+    @apply bg-opacity-10 bg-copy-primary font-medium;
+  }
+
+  /* Chat Components */
+  .chat-message {
+    @apply py-6 transition-all duration-300;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  .user-message {
+    @apply bg-card;
+  }
+
+  .assistant-message {
+    @apply bg-background;
+  }
+
+  .suggestion-btn {
+    @apply p-4 text-left rounded-lg border border-border hover:border-accent bg-card hover:bg-background transition-colors;
+  }
+
+  .chat-input {
+    @apply w-full resize-none rounded-lg border border-border bg-card text-copy-primary pl-4 pr-12 py-3 focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50;
+    max-height: 200px;
+  }
+
+  .send-button {
+    @apply absolute right-2 bottom-2.5 text-copy-secondary hover:text-copy-primary disabled:opacity-50 disabled:cursor-not-allowed p-1;
+  }
+
+  .typing-indicator {
+    @apply text-copy-secondary;
+  }
+
+  .typing-indicator::after {
+    content: '...';
+    animation: typing 1s infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes typing {
+  0% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
+}

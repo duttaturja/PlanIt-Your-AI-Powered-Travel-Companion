@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+{% load account %}
+
+{% block head_title %}Confirm Email Address{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md space-y-8">
+        <div class="text-center">
+            <svg class="mx-auto h-12 w-12 text-cta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <h2 class="mt-6 text-3xl font-bold tracking-tight text-copy-primary">
+                Confirm Email Address
+            </h2>
+            <p class="mt-2 text-sm text-copy-secondary">
+                {% if confirmation %}
+                    {% user_display confirmation.email_address.user as user_display %}
+                    Please confirm that <span class="font-medium text-copy-primary">{{ confirmation.email_address.email }}</span> is an email address for user <span class="font-medium text-copy-primary">{{ user_display }}</span>.
+                {% else %}
+                    {% url 'account_email' as email_url %}
+                    This email confirmation link has expired or is invalid. Please <a href="{{ email_url }}" class="font-medium text-cta hover:text-cta-active">request a new one</a>.
+                {% endif %}
+            </p>
+        </div>
+
+        {% if confirmation %}
+        <div class="mt-8">
+            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <button type="submit" class="group relative flex w-full justify-center rounded-md bg-cta px-3 py-2.5 text-sm font-semibold text-cta-text hover:bg-cta-active focus:outline-none focus:ring-2 focus:ring-cta focus:ring-offset-2 transition-all duration-200">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg class="h-5 w-5 text-cta-text group-hover:text-cta-text/90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    Confirm
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        <div class="mt-6">
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-border"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="bg-background px-2 text-copy-secondary">
+                        Need help?
+                    </span>
+                </div>
+            </div>
+            <div class="mt-6 flex items-center justify-center gap-2">
+                <a href="{% url 'account_login' %}" class="text-sm font-medium text-copy-secondary hover:text-copy-primary">
+                    Return to login
+                </a>
+                <span class="text-copy-secondary">•</span>
+                <a href="{% url 'account_email' %}" class="text-sm font-medium text-copy-secondary hover:text-copy-primary">
+                    Change email
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

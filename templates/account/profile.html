@@ -1,22 +1,131 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load account %}
+{% load socialaccount %}
 
-{% block title %}
-User Profile {{ block.super }}
-{% endblock title %}
+{% block title %}Profile{% endblock %}
 
-{% block body %}
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <div class="max-w-lg w-full bg-white p-8 border border-gray-200 rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">User Profile</h1>
-        <div class="flex flex-col items-center">
-            <img src="https://via.placeholder.com/100" alt="Profile Picture" class="mb-4 rounded-full shadow-lg">
-            <h2 class="text-xl font-semibold mb-2">{{ user.username }}</h2>
-            <p class="text-gray-600 mb-6">{{ user.email }}</p>
+{% block content %}
+<div class="max-w-4xl w-full space-y-8">
+    <!-- Profile Header -->
+    <div class="bg-card p-8 rounded-lg border border-border">
+        <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-8">
+            <div class="relative group">
+                <img class="w-32 h-32 rounded-full object-cover border-4 border-border bg-background"
+                    src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                    alt="{{ user.username }}'s Profile Image">
+                <div class="absolute inset-0 rounded-full bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="text-white text-sm">Change Photo</span>
+                </div>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-3xl font-bold text-copy-primary mb-2">{{ user.username }}</h1>
+                <p class="text-copy-secondary">{{ user.email }}</p>
+                <div class="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
+                    {% if user.socialaccount_set.all %}
+                        {% for account in user.socialaccount_set.all %}
+                        <span class="px-3 py-1 rounded-full text-sm bg-background border border-border text-copy-secondary">
+                            {{ account.provider }}
+                        </span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="flex justify-between items-center">
-            <a href="javascript:history.back()" class="text-blue-500 hover:underline">Back</a>
+    </div>
+
+    <!-- Account Management -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Settings Section -->
+        <div class="bg-card p-6 rounded-lg border border-border">
+            <h2 class="text-xl font-semibold text-copy-primary mb-4">Account Settings</h2>
+            <div class="space-y-4">
+                {% url 'account_email' as email_url %}
+                {% if email_url %}
+                <a href="{{ email_url }}" 
+                   class="flex items-center justify-between p-3 rounded-lg hover:bg-background transition-colors group">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-copy-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-copy-primary">Email Preferences</span>
+                    </div>
+                    <svg class="w-5 h-5 text-copy-secondary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
+
+                {% url 'account_change_password' as change_password_url %}
+                {% if change_password_url %}
+                <a href="{{ change_password_url }}" 
+                   class="flex items-center justify-between p-3 rounded-lg hover:bg-background transition-colors group">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-copy-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                        </svg>
+                        <span class="text-copy-primary">Security Settings</span>
+                    </div>
+                    <svg class="w-5 h-5 text-copy-secondary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
+
+                {% url 'account_logout' as logout_url %}
+                {% if logout_url %}
+                <a href="{{ logout_url }}" 
+                   class="flex items-center justify-between p-3 rounded-lg hover:bg-background transition-colors group">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-copy-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        <span class="text-copy-primary">Sign Out</span>
+                    </div>
+                    <svg class="w-5 h-5 text-copy-secondary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Connected Accounts -->
+        <div class="bg-card p-6 rounded-lg border border-border">
+            <h2 class="text-xl font-semibold text-copy-primary mb-4">Connected Accounts</h2>
+            <div class="space-y-4">
+                {% if user.socialaccount_set.all %}
+                    {% for account in user.socialaccount_set.all %}
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-background">
+                        <div class="flex items-center space-x-3">
+                            <img src="{% static 'images/'|add:account.provider|add:'.svg' %}" 
+                                 alt="{{ account.provider }}" 
+                                 class="w-5 h-5">
+                            <span class="text-copy-primary">{{ account.provider|title }}</span>
+                        </div>
+                        <button class="text-sm text-cta hover:text-cta-active">Disconnect</button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-copy-secondary text-sm">No connected accounts</p>
+                    <div class="mt-4 space-y-3">
+                        {% get_providers as socialaccount_providers %}
+                        {% for provider in socialaccount_providers %}
+                        <a href="{% provider_login_url provider.id process='connect' %}"
+                           class="flex items-center justify-center px-4 py-2 border border-border rounded-lg text-copy-primary hover:bg-background transition-colors">
+                            <img src="{% static 'images/'|add:provider.name|add:'.svg' %}" 
+                                 alt="{{ provider.name }}" 
+                                 class="w-5 h-5 mr-2">
+                            Connect {{ provider.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
