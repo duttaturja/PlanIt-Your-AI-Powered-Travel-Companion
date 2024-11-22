@@ -3,3 +3,4 @@ Django
 django-allauth[socialaccount]
 django-widget-tweaks
 channels[daphne]
+Pillow
