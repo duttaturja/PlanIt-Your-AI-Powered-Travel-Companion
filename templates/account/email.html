@@ -1,49 +1,101 @@
-{% extends "base.html" %}
-{% load i18n widget_tweaks %}
-{% block body %}
-<div class="container mx-auto">
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-            <div class="text-center text-3xl font-extrabold text-gray-900">
-                <!-- {% trans "Change Email" %} -->
-                Change Email
-            </div>
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load account %}
 
-            <!-- Display form errors -->
-            {% if form.errors %}
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <strong class="font-bold">{% trans "Error:" %}</strong>
-                <ul class="list-disc pl-5">
-                    {% for field in form %}
-                    {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+{% block title %}Email Management{% endblock %}
 
-            <form method="post" action="{% url 'account_email' %}">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="id_email" class="block text-sm font-medium text-gray-700">New Email:</label>
-                    <input type="email" name="email" id="id_email" {% render_field form.email
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                        %}>
+{% block content %}
+<div class="max-w-2xl w-full space-y-8">
+    <div class="text-center">
+        <h1 class="text-2xl font-bold text-copy-primary">Email Addresses</h1>
+        <p class="mt-2 text-copy-secondary">Manage your email addresses and preferences</p>
+    </div>
+
+    <div class="bg-card p-8 rounded-lg border border-border">
+        {% if user.emailaddress_set.all %}
+        <form action="{% url 'account_email' %}" method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                {% for emailaddress in user.emailaddress_set.all %}
+                <div class="flex items-center justify-between p-4 rounded-lg bg-background">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex items-center h-5">
+                            <input id="email_radio_{{ forloop.counter }}" type="radio" name="email" 
+                                   value="{{ emailaddress.email }}"
+                                   {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked{% endif %} 
+                                   class="h-4 w-4 text-cta border-border rounded-full focus:ring-cta">
+                        </div>
+                        <div class="flex-1">
+                            <label for="email_radio_{{ forloop.counter }}" class="font-medium text-copy-primary">
+                                {{ emailaddress.email }}
+                            </label>
+                            <div class="flex items-center space-x-2 mt-1">
+                                {% if emailaddress.verified %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    Verified
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <svg class="mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    Unverified
+                                </span>
+                                {% endif %}
+                                {% if emailaddress.primary %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                    Primary
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit"
-                    class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {% trans "Change Email" %}
+                {% endfor %}
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="submit" name="action_primary" 
+                        class="inline-flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cta hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    Make Primary
                 </button>
-            </form>
-            <p class="mt-6 text-center text-sm text-gray-600">
-                {% trans "Go back to" %} <a href="{% url 'home' %}"
-                    class="font-medium text-indigo-600 hover:text-indigo-500">{% trans "Account Profile" %}</a>
-            </p>
-        </div>
+                <button type="submit" name="action_send" 
+                        class="inline-flex justify-center py-2 px-4 border border-border rounded-lg shadow-sm text-sm font-medium text-copy-primary bg-background hover:bg-card focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    Re-send Verification
+                </button>
+                <button type="submit" name="action_remove" 
+                        class="inline-flex justify-center py-2 px-4 border border-red-200 rounded-lg shadow-sm text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Remove
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <p class="text-copy-secondary">You haven't added any email addresses yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="bg-card p-8 rounded-lg border border-border">
+        <h2 class="text-lg font-medium text-copy-primary mb-4">Add Email Address</h2>
+        <form method="post" action="{% url 'account_email' %}" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="email" class="block text-sm font-medium text-copy-secondary">Email Address</label>
+                <div class="mt-1">
+                    <input type="email" name="email" id="email" 
+                           class="w-full px-4 py-2 border border-border rounded-lg bg-background text-copy-primary focus:ring-2 focus:ring-cta focus:border-transparent"
+                           placeholder="Enter your email">
+                </div>
+            </div>
+            <button type="submit" name="action_add" 
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cta hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                Add Email
+            </button>
+        </form>
     </div>
 </div>
+
 {% endblock %}

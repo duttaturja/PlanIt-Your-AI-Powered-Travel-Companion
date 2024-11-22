@@ -1,0 +1,281 @@
+{% extends 'layouts/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load account %}
+{% load socialaccount %}
+
+{% block title %}Profile Settings{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl w-full space-y-8">
+    <!-- Profile Header -->
+    <div class="bg-card p-8 rounded-lg border border-border">
+        <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-8">
+            <div class="relative group">
+                {% if user.profile.avatar %}
+                <img class="w-32 h-32 rounded-full object-cover border-4 border-border bg-background"
+                    src="{{ user.profile.avatar.url }}"
+                    alt="{{ user.email }}'s Profile Image">
+                {% else %}
+                <img class="w-32 h-32 rounded-full object-cover border-4 border-border bg-background"
+                    src="{% static 'images/default-avatar.png' %}"
+                    alt="Default Profile Image">
+                {% endif %}
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-3xl font-bold text-copy-primary mb-2">{{ user.get_full_name|default:user.email }}</h1>
+                <p class="text-copy-secondary">{{ user.email }}</p>
+                {% if user.profile.location %}
+                <p class="text-copy-secondary mt-2"> 📍 {{ user.profile.location }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Management Section -->
+    <div class="bg-card p-8 rounded-lg border border-border">
+        <h2 class="text-xl font-semibold text-copy-primary mb-4">Email Addresses</h2>
+        
+        {% if user.emailaddress_set.all %}
+        <form action="{% url 'account_email' %}" method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                {% for emailaddress in user.emailaddress_set.all %}
+                <div class="flex items-center justify-between p-4 rounded-lg bg-background">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex items-center h-5">
+                            <input id="email_radio_{{ forloop.counter }}" type="radio" name="email" 
+                                   value="{{ emailaddress.email }}"
+                                   {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked{% endif %} 
+                                   class="h-4 w-4 text-cta border-border rounded-full focus:ring-cta">
+                        </div>
+                        <div class="flex-1">
+                            <label for="email_radio_{{ forloop.counter }}" class="font-medium text-copy-primary">
+                                {{ emailaddress.email }}
+                            </label>
+                            <div class="flex items-center space-x-2 mt-1">
+                                {% if emailaddress.verified %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    Verified
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <svg class="mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                        <circle cx="4" cy="4" r="3" />
+                                    </svg>
+                                    Unverified
+                                </span>
+                                {% endif %}
+                                {% if emailaddress.primary %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                    Primary
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="submit" name="action_primary" 
+                        class="inline-flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cta hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    Make Primary
+                </button>
+                <button type="submit" name="action_send" 
+                        class="inline-flex justify-center py-2 px-4 border border-border rounded-lg shadow-sm text-sm font-medium text-copy-primary bg-background hover:bg-card focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    Re-send Verification
+                </button>
+                <button type="submit" name="action_remove" 
+                        class="inline-flex justify-center py-2 px-4 border border-red-200 rounded-lg shadow-sm text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Remove
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <p class="text-copy-secondary">You haven't added any email addresses yet.</p>
+        {% endif %}
+
+        <!-- Add Email Form -->
+        <div class="mt-8 pt-6 border-t border-border">
+            <h3 class="text-lg font-medium text-copy-primary mb-4">Add Email Address</h3>
+            <form method="post" action="{% url 'account_email' %}" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="email" class="block text-sm font-medium text-copy-secondary">Email Address</label>
+                    <div class="mt-1">
+                        <input type="email" name="email" id="email" required
+                               class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+                <button type="submit" 
+                        class="inline-flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cta hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    Add Email
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Social Accounts Section -->
+    <div class="bg-card p-8 rounded-lg border border-border">
+        <h2 class="text-xl font-semibold text-copy-primary mb-4">Connected Accounts</h2>
+        
+        {% if social_accounts %}
+        <div class="space-y-4">
+            {% for account in social_accounts %}
+            <div class="flex items-center justify-between p-4 rounded-lg bg-background">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0">
+                        {% with "images/"|add:account.provider|add:".svg" as provider_icon %}
+                        <img src="{% static provider_icon %}" alt="{{ account.provider }} icon" class="w-8 h-8">
+                        {% endwith %}
+                    </div>
+                    <div>
+                        <p class="text-copy-primary font-medium">{{ account.provider|title }}</p>
+                        {% if account.extra_data.email %}
+                        <p class="text-sm text-copy-secondary">{{ account.extra_data.email }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <form method="post" action="{% url 'socialaccount_connections' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="account" value="{{ account.id }}">
+                    <button type="submit" name="action_disconnect"
+                            class="px-3 py-1 text-sm text-red-600 hover:text-red-800 font-medium hover:underline">
+                        Disconnect
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-copy-secondary text-center py-4">No social accounts connected.</p>
+        {% endif %}
+
+        <!-- Available Providers -->
+        <div class="mt-8 pt-6 border-t border-border">
+            <h3 class="text-lg font-medium text-copy-primary mb-4">Connect More Accounts</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {% for provider in available_providers %}
+                <a href="{% provider_login_url provider.id process='connect' next=request.path %}"
+                   class="flex items-center space-x-3 p-4 rounded-lg border border-border hover:bg-background transition-colors">
+                    <div class="flex-shrink-0">
+                        {% with "images/"|add:provider.id|add:".svg" as provider_icon %}
+                        <img src="{% static provider_icon %}" alt="{{ provider.name }} icon" class="w-8 h-8">
+                        {% endwith %}
+                    </div>
+                    <div>
+                        <p class="text-copy-primary font-medium">Connect {{ provider.name }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Settings Form -->
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Personal Information -->
+        <div class="bg-card p-6 rounded-lg border border-border">
+            <h2 class="text-xl font-semibold text-copy-primary mb-4">Personal Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-copy-secondary mb-1">First Name</label>
+                    {% render_field user_form.first_name class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                    {% if user_form.first_name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ user_form.first_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-copy-secondary mb-1">Last Name</label>
+                    {% render_field user_form.last_name class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                    {% if user_form.last_name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ user_form.last_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="bg-card p-6 rounded-lg border border-border">
+            <h2 class="text-xl font-semibold text-copy-primary mb-4">Profile Details</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-copy-secondary mb-1">Profile Picture</label>
+                    {% render_field profile_form.avatar class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                    {% if profile_form.avatar.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ profile_form.avatar.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-copy-secondary mb-1">Gender</label>
+                        {% render_field profile_form.gender class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                        {% if profile_form.gender.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ profile_form.gender.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-copy-secondary mb-1">Location</label>
+                        {% render_field profile_form.location class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                        {% if profile_form.location.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ profile_form.location.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-copy-secondary mb-1">Phone Number</label>
+                        {% render_field profile_form.phone_number class="w-full px-3 py-2 rounded-lg border border-border bg-background text-copy-primary focus:ring-2 focus:ring-primary focus:border-transparent" %}
+                        {% if profile_form.phone_number.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ profile_form.phone_number.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end">
+            <button type="submit" 
+                    class="inline-flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cta hover:bg-cta-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    // Handle social account connection success/error messages
+    const urlParams = new URLSearchParams(window.location.search);
+    const socialMessage = urlParams.get('social_message');
+    const socialStatus = urlParams.get('social_status');
+    
+    if (socialMessage) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
+            socialStatus === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`;
+        messageDiv.textContent = socialMessage;
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+    }
+});
+</script>
+{% endblock %}

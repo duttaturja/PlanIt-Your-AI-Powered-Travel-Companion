@@ -1,0 +1,160 @@
+{# Navbar #}
+<nav class="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            {# Logo #}
+            <div class="flex items-center">
+                <a href="/" class="group flex items-center space-x-2 text-xl font-bold text-copy-primary hover:text-cta transition-all duration-200">
+                    <svg class="h-8 w-8 text-cta transform group-hover:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span>DjangoKickstarter</span>
+                </a>
+            </div>
+
+            {# Desktop Navigation #}
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/" class="nav-link group {% if request.path == '/' %}text-copy-primary font-medium{% else %}text-copy-secondary{% endif %}">
+                    <span class="relative">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-cta transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                    </span>
+                </a>
+                <a href="/docs" class="nav-link group {% if request.path == '/docs' %}text-copy-primary font-medium{% else %}text-copy-secondary{% endif %}">
+                    <span class="relative">
+                        Documentation
+                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-cta transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                    </span>
+                </a>
+                
+                {# Theme Selector - Available to all users #}
+                <div class="relative">
+                    <select id="theme-selector" class="bg-card text-copy-primary border border-border rounded-md px-3 py-2 cursor-pointer hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent">
+                        <option value="">Default Light</option>
+                        
+                        {# Light Themes #}
+                        <optgroup label="Light Themes">
+                            <option value="theme-hotpink-light">Hot Pink Light</option>
+                            <option value="theme-github-light">GitHub Light</option>
+                            <option value="theme-solarized-light">Solarized Light Pro</option>
+                            <option value="theme-material-light">Material Light</option>
+                            <option value="theme-tailwind-light">Tailwind Light</option>
+                            <option value="theme-mint-light">Mint Light</option>
+                            <option value="theme-rose-light">Rose Light</option>
+                            <option value="theme-sky-light">Sky Light</option>
+                            <option value="theme-amber-light">Amber Light</option>
+                            <option value="theme-slate-light">Slate Light</option>
+                        </optgroup>
+
+                        {# Dark Themes #}
+                        <optgroup label="Dark Themes">
+                            <option value="theme-hotpink-dark">Hot Pink Dark</option>
+                            <option value="theme-dark-rose">Dark Rose</option>
+                            <option value="theme-tokyo">Tokyo Night</option>
+                            <option value="theme-cyberpunk">Cyberpunk Night</option>
+                            <option value="theme-dracula">Dracula Pro</option>
+                            <option value="theme-one-dark">One Dark Pro</option>
+                            <option value="theme-github-dark">GitHub Dark</option>
+                            <option value="theme-material-ocean">Material Ocean</option>
+                            <option value="theme-nord-dark">Nord Dark</option>
+                            <option value="theme-monokai-pro">Monokai Pro</option>
+                            <option value="theme-synthwave">Synthwave</option>
+                            <option value="theme-mint-dark">Mint Dark</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'core:profile' %}" class="nav-link group text-copy-secondary">
+                            <span class="relative">
+                                Profile
+                                <span class="absolute bottom-0 left-0 w-full h-0.5 bg-cta transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                            </span>
+                        </a>
+                        <a href="{% url 'account_email' %}" class="nav-link group text-copy-secondary">
+                            <span class="relative">
+                                Settings
+                                <span class="absolute bottom-0 left-0 w-full h-0.5 bg-cta transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
+                            </span>
+                        </a>
+                        <a href="{% url 'account_logout' %}" 
+                           class="px-4 py-2 rounded-lg border border-border text-copy-primary hover:bg-background hover:border-cta transition-all duration-200">
+                            Sign Out
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'account_login' %}" class="nav-link text-copy-secondary hover:text-copy-primary">Sign In</a>
+                        <a href="{% url 'account_signup' %}" class="px-4 py-2 rounded-lg bg-cta text-cta-text hover:bg-cta-active transition-all duration-200">
+                            Sign Up
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Mobile Menu Button #}
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="text-copy-secondary hover:text-copy-primary focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {# Mobile Menu #}
+    <div class="mobile-menu hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="/" class="nav-link block {% if request.path == '/' %}text-copy-primary font-medium{% else %}text-copy-secondary{% endif %}">Home</a>
+            <a href="/docs" class="nav-link block {% if request.path == '/docs' %}text-copy-primary font-medium{% else %}text-copy-secondary{% endif %}">Documentation</a>
+            
+            {# Mobile Theme Selector #}
+            <div class="px-2 py-2">
+                <select id="mobile-theme-selector" class="w-full bg-card text-copy-primary border border-border rounded-md px-3 py-2 cursor-pointer hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent">
+                    <option value="">Default Light</option>
+                    
+                    {# Light Themes #}
+                    <optgroup label="Light Themes">
+                        <option value="theme-hotpink-light">Hot Pink Light</option>
+                        <option value="theme-github-light">GitHub Light</option>
+                        <option value="theme-solarized-light">Solarized Light Pro</option>
+                        <option value="theme-material-light">Material Light</option>
+                        <option value="theme-tailwind-light">Tailwind Light</option>
+                        <option value="theme-mint-light">Mint Light</option>
+                        <option value="theme-rose-light">Rose Light</option>
+                        <option value="theme-sky-light">Sky Light</option>
+                        <option value="theme-amber-light">Amber Light</option>
+                        <option value="theme-slate-light">Slate Light</option>
+                    </optgroup>
+
+                    {# Dark Themes #}
+                    <optgroup label="Dark Themes">
+                        <option value="theme-hotpink-dark">Hot Pink Dark</option>
+                        <option value="theme-dark-rose">Dark Rose</option>
+                        <option value="theme-tokyo">Tokyo Night</option>
+                        <option value="theme-cyberpunk">Cyberpunk Night</option>
+                        <option value="theme-dracula">Dracula Pro</option>
+                        <option value="theme-one-dark">One Dark Pro</option>
+                        <option value="theme-github-dark">GitHub Dark</option>
+                        <option value="theme-material-ocean">Material Ocean</option>
+                        <option value="theme-nord-dark">Nord Dark</option>
+                        <option value="theme-monokai-pro">Monokai Pro</option>
+                        <option value="theme-synthwave">Synthwave</option>
+                        <option value="theme-mint-dark">Mint Dark</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'core:profile' %}" class="nav-link block text-copy-secondary">Profile</a>
+                <a href="{% url 'account_email' %}" class="nav-link block text-copy-secondary">Settings</a>
+                <a href="{% url 'account_logout' %}" class="nav-link block text-copy-secondary">Sign Out</a>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="nav-link block text-copy-secondary">Sign In</a>
+                <a href="{% url 'account_signup' %}" class="nav-link block text-copy-secondary">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

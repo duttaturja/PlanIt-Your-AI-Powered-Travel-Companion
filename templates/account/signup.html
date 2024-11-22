@@ -1,109 +1,89 @@
 {% extends 'layouts/base.html' %}
-{% load widget_tweaks %}
+{% load static %}
+{% load account socialaccount %}
 
-{% block title %}
-Sign Up
-{{ block.super }}
-{% endblock title %}
+{% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="max-w-md w-full bg-gray-100 border p-6 rounded-lg">
-        <h1 class="text-2xl font-bold mb-4 text-center">Sign Up</h1>
-        <p class="text-center mb-6">Already have an account? Please
-                <a href="/accounts/login/" class="text-blue-500 hover:underline">
-                        sign in
-                </a>.
+<div class="max-w-md w-full space-y-8 bg-card p-8 rounded-lg border border-border">
+    <div>
+        <h2 class="mt-6 text-center text-3xl font-bold text-copy-primary">
+            Sign Up
+        </h2>
+        <p class="mt-2 text-center text-copy-secondary">
+            Create your account to get started.
         </p>
-        <form method="post" action="{% url 'account_signup' %}">
-                {% csrf_token %}
-                <div class="mb-4">
-                        {% if form.email.errors %}
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                                <strong class="font-bold">Error:</strong>
-                                <ul class="list-disc pl-5">
-                                        {% for error in form.email.errors %}
-                                        <li>{{ error }}</li>
-                                        {% endfor %}
-                                </ul>
-                        </div>
-                        {% endif %}
-                        <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
-                        {% render_field form.email class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
-                </div>
-                <div class="mb-4">
-                        {% if form.password1.errors %}
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                                <strong class="font-bold">Error:</strong>
-                                <ul class="list-disc pl-5">
-                                        {% for error in form.password1.errors %}
-                                        <li>{{ error }}</li>
-                                        {% endfor %}
-                                </ul>
-                        </div>
-                        {% endif %}
-                        <label for="id_password" class="block text-sm font-medium text-gray-700">Password
-                        </label>
-                        {% render_field form.password1 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
-                </div>
-                <div class="mb-4">
-                        {% if form.password2.errors %}
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                                <strong class="font-bold">Error:</strong>
-                                <ul class="list-disc pl-5">
-                                        {% for error in form.password2.errors %}
-                                        <li>{{ error }}</li>
-                                        {% endfor %}
-                                </ul>
-                        </div>
-                        {% endif %}
-                        <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm
-                                Password</label>
-                        {% render_field form.password2 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" %}
-                </div>
-                {% for field in form %}
-                {% if field.errors %}
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                        <strong class="font-bold">Error:</strong>
-                        <ul class="list-disc pl-5">
-                                {% for error in field.errors %}
-                                <li>{{ error }}</li>
-                                {% endfor %}
-                        </ul>
-                </div>
-                {% endif %}
-                {% endfor %}
-                <button type="submit"
-                        class="w-full bg-blue-600 text-white p-3 rounded-md text-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Sign Up
-                </button>
-        </form>
-        <!-- <hr class="my-6">
-        <h2 class="text-lg font-semibold mb-4 text-center">Or use a third-party</h2>
-        <ul class="space-y-2">
-                <li><a href="/accounts/amazon/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Amazon</a>
-                </li>
-                <li><a href="/accounts/facebook/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Facebook</a>
-                </li>
-                <li><a href="/accounts/github/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">GitHub</a>
-                </li>
-                <li><a href="/accounts/google/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Google</a>
-                </li>
-                <li><a href="/accounts/lichess/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Lichess</a>
-                </li>
-                <li><a href="/accounts/microsoft/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Microsoft</a>
-                </li>
-                <li><a href="/accounts/telegram/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Telegram</a>
-                </li>
-                <li><a href="/accounts/twitch/login/?process=login"
-                                class="block w-full text-center text-gray-700 hover:bg-gray-100 p-2 rounded-md">Twitch</a>
-                </li>
-        </ul> -->
+    </div>
+
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+    <div class="flex flex-col space-y-3">
+        {% for provider in socialaccount_providers %}
+        <a href="{% provider_login_url provider.id process='login' %}"
+            class="flex items-center justify-center px-4 py-2 border border-border rounded-md text-copy-primary hover:bg-background transition-colors">
+            <img src="{% static 'images/'|add:provider.name|add:'.svg' %}" alt="{{ provider.name }}" class="h-5 w-5 mr-2">
+            Continue with {{ provider.name }}
+        </a>
+        {% endfor %}
+        <div class="relative my-4">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-border"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-card text-copy-secondary">Or continue with email</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <form class="mt-8 space-y-6" method="POST" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        <div class="rounded-md shadow-sm space-y-4">
+            <div>
+                <label for="id_email" class="sr-only">Email address</label>
+                <input id="id_email" name="email" type="email" autocomplete="email" required
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    placeholder="Email address">
+            </div>
+            <div>
+                <label for="id_password1" class="sr-only">Password</label>
+                <input id="id_password1" name="password1" type="password" required
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    placeholder="Password">
+            </div>
+            <div>
+                <label for="id_password2" class="sr-only">Confirm Password</label>
+                <input id="id_password2" name="password2" type="password" required
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    placeholder="Confirm Password">
+            </div>
+        </div>
+
+        <div>
+            <button type="submit"
+                class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-cta-text bg-cta hover:bg-cta-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </span>
+                Sign up
+            </button>
+        </div>
+    </form>
+
+    <p class="mt-8 text-center text-sm text-copy-secondary">
+        Already have an account?
+        <a href="{{ login_url }}" class="font-medium text-cta hover:text-cta-active">
+            Sign in
+        </a>
+    </p>
 </div>
 {% endblock %}
