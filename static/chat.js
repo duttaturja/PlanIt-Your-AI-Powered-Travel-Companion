@@ -14,7 +14,7 @@ const CHAT_CONFIG = {
     },
     assistant: { 
         name: 'PlanIt',
-        avatar: '/static/images/planit-avatar.png' // You'll need to add this image
+        avatar: '/static/images/planit-avatar.png'
     }
 };
 
@@ -49,8 +49,8 @@ const messageTemplates = {
             <div class="max-w-3xl mx-auto px-4">
                 <div class="flex items-start gap-4">
                     <img src="${CHAT_CONFIG.assistant.avatar}" alt="PlanIt Avatar" class="w-8 h-8 rounded-full mt-1" />
-                    <div class="flex items-center space-x-2">
-                        <div class="typing-indicator text-copy-secondary">Thinking</div>
+                    <div class="flex-1">
+                        <p class="text-copy-secondary typing-indicator">Thinking</p>
                     </div>
                 </div>
             </div>
@@ -58,142 +58,123 @@ const messageTemplates = {
     `
 };
 
-// Chat History Management
-class ChatHistory {
-    constructor() {
-        this.messages = [];
-        this.currentPlan = null;
-    }
-
-    addMessage(role, content) {
-        this.messages.push({ role, content, timestamp: new Date() });
-        this.saveToLocalStorage();
-    }
-
-    startNewPlan() {
-        this.currentPlan = {
-            id: Date.now(),
-            title: 'New Travel Plan',
-            messages: []
-        };
-        this.saveToLocalStorage();
-    }
-
-    saveToLocalStorage() {
-        localStorage.setItem('chatHistory', JSON.stringify({
-            messages: this.messages,
-            currentPlan: this.currentPlan
-        }));
-    }
-
-    loadFromLocalStorage() {
-        const saved = localStorage.getItem('chatHistory');
-        if (saved) {
-            const { messages, currentPlan } = JSON.parse(saved);
-            this.messages = messages;
-            this.currentPlan = currentPlan;
-        }
-    }
-}
-
-// Initialize Chat
-const chatHistory = new ChatHistory();
-
-// Message Handler
 class MessageHandler {
-    static async send(message) {
-        // Add user message
-        MessageHandler.addToChat('user', message);
-        chatHistory.addMessage('user', message);
+    constructor() {
+        this.isProcessing = false;
+    }
 
-        // Show typing indicator
-        MessageHandler.showTypingIndicator();
+    async send(message) {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
 
         try {
-            // Send to backend
-            const response = await fetch('/api/chat/', {
+            // Add user message to chat
+            this.addToChat('user', message);
+            
+            // Show typing indicator
+            this.showTypingIndicator();
+            
+            // Send message to backend
+            const response = await fetch('/chat/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
                 body: JSON.stringify({ message })
             });
 
-            if (!response.ok) throw new Error('Failed to get response');
-
             const data = await response.json();
-            MessageHandler.removeTypingIndicator();
-            MessageHandler.addToChat('assistant', data.response);
-            chatHistory.addMessage('assistant', data.response);
-
+            
+            if (data.status === 'success') {
+                // Remove typing indicator and add assistant's response
+                this.removeTypingIndicator();
+                this.addToChat('assistant', data.response);
+            } else {
+                throw new Error(data.error || 'Failed to get response');
+            }
         } catch (error) {
             console.error('Error:', error);
-            MessageHandler.removeTypingIndicator();
-            MessageHandler.addToChat('assistant', 'I apologize, but I encountered an error. Please try again.');
+            this.removeTypingIndicator();
+            this.addToChat('assistant', 'Sorry, I encountered an error. Please try again.');
+        } finally {
+            this.isProcessing = false;
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            sendButton.disabled = true;
         }
     }
 
-    static addToChat(role, message) {
-        const template = messageTemplates[role](message);
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = template;
-        chatMessages.appendChild(tempDiv.firstElementChild);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    static showTypingIndicator() {
-        if (!document.getElementById('typing-indicator')) {
-            const template = messageTemplates.typing();
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = template;
-            chatMessages.appendChild(tempDiv.firstElementChild);
+    addToChat(role, message) {
+        const template = messageTemplates[role];
+        if (template) {
+            chatMessages.insertAdjacentHTML('beforeend', template(message));
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
 
-    static removeTypingIndicator() {
+    showTypingIndicator() {
+        chatMessages.insertAdjacentHTML('beforeend', messageTemplates.typing());
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    removeTypingIndicator() {
         const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
+        if (indicator) {
+            indicator.remove();
+        }
     }
 }
 
+// Initialize Message Handler
+const messageHandler = new MessageHandler();
+
 // Event Listeners
-chatForm.addEventListener('submit', (e) => {
+chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const message = userInput.value.trim();
     if (message) {
-        MessageHandler.send(message);
-        userInput.value = '';
-        userInput.style.height = 'auto';
-        sendButton.disabled = true;
+        await messageHandler.send(message);
     }
 });
 
-// Auto-resize textarea
 userInput.addEventListener('input', function() {
     this.style.height = 'auto';
     this.style.height = (this.scrollHeight) + 'px';
     sendButton.disabled = !this.value.trim();
 });
 
-// Mobile sidebar toggle
 mobileSidebarToggle?.addEventListener('click', () => {
-    sidebar.classList.toggle('hidden');
+    sidebar?.classList.toggle('hidden');
 });
 
 // Suggestion handler
-window.suggestPrompt = function(button) {
+function suggestPrompt(button) {
     const promptText = button.querySelector('p:last-child').textContent.replace(/['"]/g, '');
     userInput.value = promptText;
     userInput.focus();
     userInput.dispatchEvent(new Event('input'));
-};
+}
 
 // New chat handler
-window.startNewChat = function() {
-    chatHistory.startNewPlan();
-    chatMessages.innerHTML = '';
-    // Add welcome message
-    MessageHandler.addToChat('assistant', 'Hello! I\'m ready to help you plan your next adventure. What type of trip would you like to plan?');
-};
+async function startNewChat() {
+    try {
+        const response = await fetch('/clear-chat/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        if (data.status === 'success') {
+            chatMessages.innerHTML = '';
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            sendButton.disabled = true;
+        } else {
+            console.error('Failed to clear chat:', data.error);
+        }
+    } catch (error) {
+        console.error('Error clearing chat:', error);
+    }
+}

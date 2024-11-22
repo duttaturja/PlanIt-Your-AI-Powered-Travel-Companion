@@ -31,18 +31,6 @@
         33% { content: '..'; }
         66% { content: '...'; }
     }
-    
-    .suggestion-btn {
-        @apply p-4 text-left rounded-lg border border-border hover:border-accent bg-card hover:bg-background transition-colors;
-    }
-    
-    .chat-input {
-        @apply w-full resize-none rounded-lg border border-border bg-card text-copy-primary pl-4 pr-12 py-3 focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50;
-    }
-    
-    .send-button {
-        @apply absolute right-2 bottom-2.5 text-copy-secondary hover:text-copy-primary disabled:opacity-50 disabled:cursor-not-allowed p-1;
-    }
 </style>
 {% endblock head %}
 {% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
@@ -52,13 +40,13 @@
     <!-- Sidebar -->
     <div id="sidebar" class="hidden md:flex md:flex-col md:w-[260px] bg-card border-r border-border">
         <!-- New Chat Button -->
-        <button onclick="startNewChat()" class="suggestion-btn mb-4">
-            <div class="flex items-center gap-2">
+        <div class="p-4">
+            <button onclick="startNewChat()" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md border border-border bg-background text-copy-primary hover:border-accent transition-colors">
                 <i class="fas fa-plus"></i>
                 <span>New Trip Plan</span>
-            </div>
-        </button>
-        
+            </button>
+        </div>
+
         <!-- Previous Chats -->
         <div class="flex-1 overflow-y-auto">
             <div class="px-4 py-2">
@@ -105,61 +93,64 @@
         </div>
 
         <!-- Chat Messages Container -->
-        <div id="chatMessages" class="flex-1 overflow-y-auto px-4 py-2">
+        <div id="chatMessages" class="flex-1 overflow-y-auto">
             <!-- Welcome Message -->
-            <div class="max-w-2xl mx-auto py-8 text-center">
-                <svg class="w-16 h-16 mx-auto text-copy-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="mt-4 text-2xl font-semibold text-copy-primary">Welcome to PlanIt</h2>
-                <p class="mt-2 text-copy-secondary">Your AI-powered travel companion. How can I help plan your next adventure?</p>
-                
-                <!-- Quick Start Suggestions -->
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
-                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                        <p class="font-medium text-copy-primary">Plan a weekend getaway</p>
-                        <p class="text-sm text-copy-secondary">"I want to plan a relaxing weekend trip"</p>
-                    </button>
-                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                        <p class="font-medium text-copy-primary">Find budget-friendly destinations</p>
-                        <p class="text-sm text-copy-secondary">"Show me affordable travel destinations"</p>
-                    </button>
-                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                        <p class="font-medium text-copy-primary">Explore adventure activities</p>
-                        <p class="text-sm text-copy-secondary">"What adventure activities can I do in [place]?"</p>
-                    </button>
-                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                        <p class="font-medium text-copy-primary">Create a travel itinerary</p>
-                        <p class="text-sm text-copy-secondary">"Help me create a 5-day itinerary"</p>
-                    </button>
+            <div class="chat-message assistant-message">
+                <div class="max-w-3xl mx-auto px-4">
+                    <div class="flex items-start gap-4">
+                        <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Avatar" class="w-8 h-8 rounded-full mt-1" />
+                        <div class="flex-1">
+                            <div class="prose prose-sm max-w-none">
+                                <h2 class="text-2xl font-semibold text-copy-primary mb-2">Welcome to PlanIt</h2>
+                                <p class="text-copy-secondary">I'm your AI travel companion, ready to help plan your next adventure. How would you like to start?</p>
+                                
+                                <!-- Quick Start Suggestions -->
+                                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
+                                        <p class="font-medium text-copy-primary">Weekend Getaway</p>
+                                        <p class="text-sm text-copy-secondary">"Plan a 3-day trip to a nearby city with cultural attractions"</p>
+                                    </button>
+                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
+                                        <p class="font-medium text-copy-primary">Adventure Trip</p>
+                                        <p class="text-sm text-copy-secondary">"Suggest an adventurous 1-week itinerary in Costa Rica"</p>
+                                    </button>
+                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
+                                        <p class="font-medium text-copy-primary">Family Vacation</p>
+                                        <p class="text-sm text-copy-secondary">"Help me plan a family-friendly summer vacation in Europe"</p>
+                                    </button>
+                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
+                                        <p class="font-medium text-copy-primary">Budget Travel</p>
+                                        <p class="text-sm text-copy-secondary">"Find budget-friendly destinations for a 2-week trip"</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- Chat messages will be dynamically added here -->
         </div>
 
         <!-- Input Area -->
         <div class="border-t border-border p-4">
             <div class="max-w-3xl mx-auto">
-                <form id="chatForm" class="flex items-end gap-3">
-                    <div class="flex-1 min-h-[20px] relative">
-                        <textarea
-                            id="userInput"
-                            rows="1"
-                            class="chat-input"
-                            placeholder="Message PlanIt..."
-                        ></textarea>
-                        <button
-                            id="sendButton"
-                            type="submit"
-                            class="send-button"
-                            disabled
-                        >
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
+                <form id="chatForm" class="relative">
+                    <textarea
+                        id="userInput"
+                        rows="1"
+                        class="chat-input"
+                        placeholder="Ask me anything about travel planning..."
+                    ></textarea>
+                    <button
+                        id="sendButton"
+                        type="submit"
+                        class="send-button"
+                        disabled
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </form>
                 <p class="mt-2 text-xs text-center text-copy-secondary">
-                    PlanIt may produce inaccurate information. Consider checking important details.
+                    PlanIt helps you plan trips but always verify important details like bookings and travel requirements.
                 </p>
             </div>
         </div>

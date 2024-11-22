@@ -4,5 +4,9 @@ django-allauth[socialaccount]
 django-widget-tweaks
 channels[daphne]
 Pillow
-faiss-cpu
+langchain
+langchain-community
+langchain-core
 langchain-ollama
+faiss-cpu
+python-dotenv

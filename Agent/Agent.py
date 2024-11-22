@@ -6,7 +6,7 @@ Handles language model operations and conversation management.
 import logging
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage
-from langchain_ollama import Ollama
+from langchain_ollama import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
 from langchain.memory import ConversationBufferMemory
 
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 class TravelAgent:
     def __init__(self):
-        self.llm = Ollama(model="llama2")
+        self.llm = OllamaLLM(model="llama2")
         self.memory = ConversationBufferMemory(
             return_messages=True,
             memory_key="chat_history"
@@ -50,19 +50,4 @@ class TravelAgent:
 
     def clear_history(self):
         self.memory.clear()
-
-# Example usage:
-if __name__ == "__main__":
-    agent = TravelAgent()
-    
-    # Example conversation
-    print("Agent: Hello! I'm PlanIT, your AI travel companion. How can I help plan your next adventure?")
-    
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() in ['exit', 'quit', 'bye']:
-            print("Agent: Goodbye! Have a great trip!")
-            break
-            
-        response = agent.chat(user_input)
-        print(f"Agent: {response}")
+        logger.info("Chat history cleared")
