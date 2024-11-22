@@ -1,100 +1,199 @@
-// Selecting DOM elements
+// DOM Elements
 const chatMessages = document.getElementById('chatMessages');
 const userInput = document.getElementById('userInput');
 const sendButton = document.getElementById('sendButton');
+const chatForm = document.getElementById('chatForm');
+const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
 const sidebar = document.getElementById('sidebar');
-const sidebarToggler = document.getElementById('sidebarToggler');
-const profileButton = document.getElementById('profileButton');
-const profileDropdown = document.getElementById('profileDropdown');
-const overlay = document.getElementById('overlay');
 
-// User and Bot Data
-const users = {
-    user: { name: 'You', avatar: 'https://via.placeholder.com/40' },
-    bot: { name: 'PlanIt', avatar: 'https://via.placeholder.com/40?text=Bot' }
+// Chat Configuration
+const CHAT_CONFIG = {
+    user: { 
+        name: 'You',
+        avatar: 'https://ui-avatars.com/api/?background=random'
+    },
+    assistant: { 
+        name: 'PlanIt',
+        avatar: '/static/images/planit-avatar.png' // You'll need to add this image
+    }
 };
 
-// Function to add a message
-function addMessage(sender, message) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('flex', 'items-start', 'mb-4');
+// Message Templates
+const messageTemplates = {
+    user: (message) => `
+        <div class="chat-message user-message">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="flex items-start gap-4">
+                    <img src="${CHAT_CONFIG.user.avatar}" alt="User Avatar" class="w-8 h-8 rounded-full mt-1" />
+                    <div class="flex-1">
+                        <p class="text-copy-primary">${message}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    assistant: (message) => `
+        <div class="chat-message assistant-message">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="flex items-start gap-4">
+                    <img src="${CHAT_CONFIG.assistant.avatar}" alt="PlanIt Avatar" class="w-8 h-8 rounded-full mt-1" />
+                    <div class="flex-1">
+                        <p class="text-copy-primary whitespace-pre-wrap">${message}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+    typing: () => `
+        <div class="chat-message assistant-message" id="typing-indicator">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="flex items-start gap-4">
+                    <img src="${CHAT_CONFIG.assistant.avatar}" alt="PlanIt Avatar" class="w-8 h-8 rounded-full mt-1" />
+                    <div class="flex items-center space-x-2">
+                        <div class="typing-indicator text-copy-secondary">Thinking</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+};
 
-    const avatarElement = document.createElement('img');
-    avatarElement.src = users[sender].avatar;
-    avatarElement.alt = `${users[sender].name}'s avatar`;
-    avatarElement.classList.add('w-10', 'h-10', 'rounded-full', 'mr-3');
+// Chat History Management
+class ChatHistory {
+    constructor() {
+        this.messages = [];
+        this.currentPlan = null;
+    }
 
-    const contentElement = document.createElement('div');
-    contentElement.classList.add('flex', 'flex-col');
+    addMessage(role, content) {
+        this.messages.push({ role, content, timestamp: new Date() });
+        this.saveToLocalStorage();
+    }
 
-    const nameElement = document.createElement('span');
-    nameElement.textContent = users[sender].name;
-    nameElement.classList.add('font-semibold', 'mb-1');
+    startNewPlan() {
+        this.currentPlan = {
+            id: Date.now(),
+            title: 'New Travel Plan',
+            messages: []
+        };
+        this.saveToLocalStorage();
+    }
 
-    const textElement = document.createElement('p');
-    textElement.textContent = message;
-    textElement.classList.add('bg-gray-200', 'rounded-lg', 'p-2', sender === 'user' ? 'text-right' : '');
+    saveToLocalStorage() {
+        localStorage.setItem('chatHistory', JSON.stringify({
+            messages: this.messages,
+            currentPlan: this.currentPlan
+        }));
+    }
 
-    contentElement.appendChild(nameElement);
-    contentElement.appendChild(textElement);
-
-    messageElement.appendChild(avatarElement);
-    messageElement.appendChild(contentElement);
-
-    chatMessages.appendChild(messageElement);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Function to show typing indicator
-function showTypingIndicator() {
-    const indicator = document.createElement('div');
-    indicator.className = 'typing-indicator flex items-center space-x-1';
-    indicator.innerHTML = `
-        <div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-        <div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-        <div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-    `;
-    chatMessages.appendChild(indicator);
-    return indicator;
-}
-
-// Event Listeners
-sendButton.addEventListener('click', sendMessage);
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-function sendMessage() {
-    const message = userInput.value.trim();
-    if (message) {
-        addMessage('user', message);
-        userInput.value = '';
-        const typingIndicator = showTypingIndicator();
-
-        // Simulate bot response
-        setTimeout(() => {
-            typingIndicator.remove();
-            addMessage('bot', 'This is a sample bot response.');
-        }, 2000);
+    loadFromLocalStorage() {
+        const saved = localStorage.getItem('chatHistory');
+        if (saved) {
+            const { messages, currentPlan } = JSON.parse(saved);
+            this.messages = messages;
+            this.currentPlan = currentPlan;
+        }
     }
 }
 
-// Sidebar toggle
-sidebarToggler.addEventListener('click', () => {
-    sidebar.classList.toggle('-translate-x-full');
-    overlay.classList.toggle('hidden');
+// Initialize Chat
+const chatHistory = new ChatHistory();
+
+// Message Handler
+class MessageHandler {
+    static async send(message) {
+        // Add user message
+        MessageHandler.addToChat('user', message);
+        chatHistory.addMessage('user', message);
+
+        // Show typing indicator
+        MessageHandler.showTypingIndicator();
+
+        try {
+            // Send to backend
+            const response = await fetch('/api/chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ message })
+            });
+
+            if (!response.ok) throw new Error('Failed to get response');
+
+            const data = await response.json();
+            MessageHandler.removeTypingIndicator();
+            MessageHandler.addToChat('assistant', data.response);
+            chatHistory.addMessage('assistant', data.response);
+
+        } catch (error) {
+            console.error('Error:', error);
+            MessageHandler.removeTypingIndicator();
+            MessageHandler.addToChat('assistant', 'I apologize, but I encountered an error. Please try again.');
+        }
+    }
+
+    static addToChat(role, message) {
+        const template = messageTemplates[role](message);
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = template;
+        chatMessages.appendChild(tempDiv.firstElementChild);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    static showTypingIndicator() {
+        if (!document.getElementById('typing-indicator')) {
+            const template = messageTemplates.typing();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = template;
+            chatMessages.appendChild(tempDiv.firstElementChild);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+
+    static removeTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+    }
+}
+
+// Event Listeners
+chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = userInput.value.trim();
+    if (message) {
+        MessageHandler.send(message);
+        userInput.value = '';
+        userInput.style.height = 'auto';
+        sendButton.disabled = true;
+    }
 });
 
-// Overlay click to close sidebar
-overlay.addEventListener('click', () => {
-    sidebar.classList.add('-translate-x-full');
-    overlay.classList.add('hidden');
+// Auto-resize textarea
+userInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+    sendButton.disabled = !this.value.trim();
 });
 
-// Profile dropdown toggle
-profileButton.addEventListener('click', () => {
-    profileDropdown.classList.toggle('hidden');
+// Mobile sidebar toggle
+mobileSidebarToggle?.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden');
 });
 
-// Initial bot message
-addMessage('bot', 'Hello! How can I assist you today?');
+// Suggestion handler
+window.suggestPrompt = function(button) {
+    const promptText = button.querySelector('p:last-child').textContent.replace(/['"]/g, '');
+    userInput.value = promptText;
+    userInput.focus();
+    userInput.dispatchEvent(new Event('input'));
+};
+
+// New chat handler
+window.startNewChat = function() {
+    chatHistory.startNewPlan();
+    chatMessages.innerHTML = '';
+    // Add welcome message
+    MessageHandler.addToChat('assistant', 'Hello! I\'m ready to help you plan your next adventure. What type of trip would you like to plan?');
+};

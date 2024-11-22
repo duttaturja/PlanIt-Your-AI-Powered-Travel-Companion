@@ -50,4 +50,57 @@
   .nav-link.active {
     @apply bg-opacity-10 bg-copy-primary font-medium;
   }
+
+  /* Chat Components */
+  .chat-message {
+    @apply py-6 transition-all duration-300;
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  .user-message {
+    @apply bg-card;
+  }
+
+  .assistant-message {
+    @apply bg-background;
+  }
+
+  .suggestion-btn {
+    @apply p-4 text-left rounded-lg border border-border hover:border-accent bg-card hover:bg-background transition-colors;
+  }
+
+  .chat-input {
+    @apply w-full resize-none rounded-lg border border-border bg-card text-copy-primary pl-4 pr-12 py-3 focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50;
+    max-height: 200px;
+  }
+
+  .send-button {
+    @apply absolute right-2 bottom-2.5 text-copy-secondary hover:text-copy-primary disabled:opacity-50 disabled:cursor-not-allowed p-1;
+  }
+
+  .typing-indicator {
+    @apply text-copy-secondary;
+  }
+
+  .typing-indicator::after {
+    content: '...';
+    animation: typing 1s infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes typing {
+  0% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
 }
