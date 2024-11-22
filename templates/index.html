@@ -1,161 +1,171 @@
 {% extends "base.html" %}
 {% load static %}
-{% block head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-    .chat-message {
-        padding: 1.5rem 0;
-        animation: fadeIn 0.3s ease-in;
-    }
-    
-    .user-message {
-        background-color: rgb(var(--card));
-    }
-    
-    .assistant-message {
-        background-color: rgb(var(--background));
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .typing-indicator::after {
-        content: '...';
-        animation: typing 1s infinite;
-    }
-    
-    @keyframes typing {
-        0% { content: '.'; }
-        33% { content: '..'; }
-        66% { content: '...'; }
-    }
-</style>
-{% endblock head %}
+
 {% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
+
 {% block body %}
-
-<div class="flex h-screen bg-background">
-    <!-- Sidebar -->
-    <div id="sidebar" class="hidden md:flex md:flex-col md:w-[260px] bg-card border-r border-border">
-        <!-- New Chat Button -->
-        <div class="p-4">
-            <button onclick="startNewChat()" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md border border-border bg-background text-copy-primary hover:border-accent transition-colors">
-                <i class="fas fa-plus"></i>
-                <span>New Trip Plan</span>
-            </button>
-        </div>
-
-        <!-- Previous Chats -->
-        <div class="flex-1 overflow-y-auto">
-            <div class="px-4 py-2">
-                <h3 class="text-xs uppercase text-copy-secondary font-medium">Previous Plans</h3>
-                <div class="mt-2 space-y-2">
-                    <!-- Previous chat items will be dynamically added here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- User Profile Section -->
-        <div class="border-t border-border p-4">
-            {% if user.is_authenticated %}
-            <div class="flex items-center gap-3">
-                <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=random" alt="Profile" class="w-8 h-8 rounded-full">
-                <div class="flex-1">
-                    <p class="text-sm font-medium text-copy-primary">{{ user.username }}</p>
-                    <p class="text-xs text-copy-secondary">{{ user.email }}</p>
-                </div>
-                <form method="post" action="{% url 'account_logout' %}" class="inline">
-                    {% csrf_token %}
-                    <button type="submit" class="text-copy-secondary hover:text-copy-primary">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </form>
-            </div>
-            {% else %}
-            <a href="{% url 'account_login' %}" class="block text-center py-2 px-4 rounded-md bg-card text-copy-primary hover:bg-background border border-border hover:border-accent">
-                Sign In
-            </a>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Main Chat Area -->
-    <div class="flex-1 flex flex-col">
-        <!-- Mobile Header -->
-        <div class="md:hidden flex items-center justify-between p-4 border-b border-border">
-            <button id="mobileSidebarToggle" class="p-2 hover:bg-card rounded-md">
-                <i class="fas fa-bars text-copy-primary"></i>
-            </button>
-            <h1 class="text-xl font-semibold text-copy-primary">PlanIt</h1>
-            <div class="w-8"></div> <!-- Spacer for alignment -->
-        </div>
-
-        <!-- Chat Messages Container -->
-        <div id="chatMessages" class="flex-1 overflow-y-auto">
-            <!-- Welcome Message -->
-            <div class="chat-message assistant-message">
-                <div class="max-w-3xl mx-auto px-4">
-                    <div class="flex items-start gap-4">
-                        <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Avatar" class="w-8 h-8 rounded-full mt-1" />
-                        <div class="flex-1">
-                            <div class="prose prose-sm max-w-none">
-                                <h2 class="text-2xl font-semibold text-copy-primary mb-2">Welcome to PlanIt</h2>
-                                <p class="text-copy-secondary">I'm your AI travel companion, ready to help plan your next adventure. How would you like to start?</p>
-                                
-                                <!-- Quick Start Suggestions -->
-                                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                                        <p class="font-medium text-copy-primary">Weekend Getaway</p>
-                                        <p class="text-sm text-copy-secondary">"Plan a 3-day trip to a nearby city with cultural attractions"</p>
-                                    </button>
-                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                                        <p class="font-medium text-copy-primary">Adventure Trip</p>
-                                        <p class="text-sm text-copy-secondary">"Suggest an adventurous 1-week itinerary in Costa Rica"</p>
-                                    </button>
-                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                                        <p class="font-medium text-copy-primary">Family Vacation</p>
-                                        <p class="text-sm text-copy-secondary">"Help me plan a family-friendly summer vacation in Europe"</p>
-                                    </button>
-                                    <button onclick="suggestPrompt(this)" class="suggestion-btn">
-                                        <p class="font-medium text-copy-primary">Budget Travel</p>
-                                        <p class="text-sm text-copy-secondary">"Find budget-friendly destinations for a 2-week trip"</p>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+<div class="min-h-screen bg-gradient-to-b from-background to-card">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Chat Container -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-accent p-4 text-white">
+                <div class="flex items-center gap-3">
+                    <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Logo" class="w-10 h-10 rounded-full">
+                    <div>
+                        <h1 class="text-xl font-bold">PlanIt</h1>
+                        <p class="text-sm opacity-90">Your AI Travel Companion</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Input Area -->
-        <div class="border-t border-border p-4">
-            <div class="max-w-3xl mx-auto">
-                <form id="chatForm" class="relative">
-                    <textarea
-                        id="userInput"
-                        rows="1"
-                        class="chat-input"
-                        placeholder="Ask me anything about travel planning..."
-                    ></textarea>
-                    <button
-                        id="sendButton"
-                        type="submit"
-                        class="send-button"
-                        disabled
-                    >
-                        <i class="fas fa-paper-plane"></i>
+            <!-- Messages Area -->
+            <div class="h-[60vh] overflow-y-auto p-4 space-y-4" id="messages">
+                {% if not messages %}
+                    <!-- Welcome Message -->
+                    <div class="bg-background rounded-lg p-6 shadow-sm">
+                        <h2 class="text-2xl font-bold text-accent mb-4">Welcome to PlanIt!</h2>
+                        <p class="text-gray-600 mb-6">Ready to plan your next adventure? Here are some ways I can help:</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <form method="POST" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="message" value="Plan a weekend getaway to a nearby city with cultural attractions">
+                                <button type="submit" 
+                                    class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
+                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                    <div class="font-semibold text-accent">Weekend Getaway</div>
+                                    <p class="text-sm text-gray-600 mt-1">Discover a perfect weekend escape</p>
+                                </button>
+                            </form>
+
+                            <form method="POST" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="message" value="Suggest an adventurous 1-week itinerary in Costa Rica">
+                                <button type="submit"
+                                    class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
+                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                    <div class="font-semibold text-accent">Adventure Trip</div>
+                                    <p class="text-sm text-gray-600 mt-1">Plan an exciting adventure abroad</p>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">{{ error }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% for message in messages %}
+                    <div class="flex {% if message.role == 'user' %}justify-end{% endif %} items-start gap-2 animate-fade-in">
+                        {% if message.role != 'user' %}
+                            <img src="{% static 'images/planit-avatar.png' %}" 
+                                 alt="PlanIt" 
+                                 class="w-8 h-8 rounded-full">
+                        {% endif %}
+                        
+                        <div class="{% if message.role == 'user' %}bg-accent text-white{% else %}bg-gray-100 text-gray-800{% endif %} 
+                                    rounded-2xl px-4 py-2 max-w-[80%] shadow-sm">
+                            <p class="whitespace-pre-wrap">{{ message.content }}</p>
+                        </div>
+
+                        {% if message.role == 'user' %}
+                            <img src="https://ui-avatars.com/api/?background=random" 
+                                 alt="You" 
+                                 class="w-8 h-8 rounded-full">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Input Area -->
+            <div class="border-t border-gray-200 p-4 bg-white">
+                <form method="POST" class="relative">
+                    {% csrf_token %}
+                    <textarea name="message" 
+                            rows="3"
+                            class="w-full px-4 py-3 pr-12 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white resize-none"
+                            placeholder="Ask me about your travel plans..."
+                            required></textarea>
+                    <button type="submit"
+                            class="absolute right-3 bottom-3 p-2 text-white bg-accent rounded-full hover:bg-accent-dark transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                        </svg>
                     </button>
                 </form>
-                <p class="mt-2 text-xs text-center text-copy-secondary">
-                    PlanIt helps you plan trips but always verify important details like bookings and travel requirements.
+                <p class="mt-2 text-xs text-center text-gray-500">
+                    Always verify important travel details and requirements.
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-<script src="{% static 'chat.js' %}" defer></script>
+<style>
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth scrollbar */
+#messages {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+#messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+/* Textarea autoresize */
+textarea {
+    min-height: 60px;
+    max-height: 150px;
+}
+</style>
+
+<script>
+// Auto-scroll to bottom of messages
+const messages = document.getElementById('messages');
+messages.scrollTop = messages.scrollHeight;
+
+// Auto-resize textarea
+const textarea = document.querySelector('textarea');
+textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+</script>
 {% endblock body %}
