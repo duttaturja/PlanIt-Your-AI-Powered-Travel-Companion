@@ -31,6 +31,9 @@ class TravelAgent:
             memory_key="chat_history"
         )
         
+        # Initialize conversation counter
+        self.conversation_counter = int(self.entity_store.get("conversation_counter", default=0))
+        
         self.prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content=(
                 "You are PlanIT, an expert AI travel companion. "
@@ -60,8 +63,20 @@ class TravelAgent:
                 "special_requirements": self.entity_store.get("special_requirements", default={})
             }
             
-            # Build context from entities
+            # Retrieve last 10 conversations
+            conversations = []
+            for i in range(max(0, self.conversation_counter - 10), self.conversation_counter):
+                conv = self.entity_store.get(f"conversation_{i}", default=None)
+                if conv:
+                    conversations.append(conv)
+            
+            # Build context from entities and recent conversations
             context = []
+            if conversations:
+                context.append("Recent Conversations:")
+                context.extend(conversations[-10:])  # Only last 10
+                context.append("")  # Empty line separator
+            
             for entity_type, value in entities.items():
                 if value:
                     formatted_type = entity_type.replace("_", " ").title()
@@ -88,6 +103,12 @@ class TravelAgent:
                 {"input": user_input},
                 {"output": response}
             )
+            
+            # Store conversation in entity store
+            conversation = f"User: {user_input}\nAgent: {response}"
+            self.entity_store.set(f"conversation_{self.conversation_counter}", conversation)
+            self.conversation_counter += 1
+            self.entity_store.set("conversation_counter", self.conversation_counter)
             
             # Update stored entities based on user input
             input_lower = user_input.lower()
@@ -130,7 +151,20 @@ class TravelAgent:
             # Clear entity store
             self.entity_store.delete("preferences")
             self.entity_store.delete("destinations")
+            self.entity_store.delete("budget")
+            self.entity_store.delete("dates")
+            self.entity_store.delete("activities")
+            self.entity_store.delete("accommodation")
+            self.entity_store.delete("transportation")
+            self.entity_store.delete("special_requirements")
             self.entity_store.delete("last_interaction")
+            
+            # Clear conversation history
+            for i in range(max(0, self.conversation_counter - 10), self.conversation_counter):
+                self.entity_store.delete(f"conversation_{i}")
+            self.conversation_counter = 0
+            self.entity_store.set("conversation_counter", 0)
+            
             logger.info("Conversation history and entity store cleared")
         except Exception as e:
             logger.warning(f"Error clearing history: {e}")
