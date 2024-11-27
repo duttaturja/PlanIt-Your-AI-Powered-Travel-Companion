@@ -10,3 +10,4 @@ langchain-core
 langchain-ollama
 faiss-cpu
 python-dotenv
+duckduckgo-search
