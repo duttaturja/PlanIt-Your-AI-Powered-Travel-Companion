@@ -11,3 +11,4 @@ langchain-ollama
 faiss-cpu
 python-dotenv
 duckduckgo-search
+langchain-groq

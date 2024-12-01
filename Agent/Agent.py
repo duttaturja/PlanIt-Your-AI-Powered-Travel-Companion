@@ -1,5 +1,5 @@
 """
-LLM interface functionality for DocuBuddy.
+LLM interface functionality for PlanIT.
 Handles language model operations and conversation management.
 """
 
@@ -7,6 +7,7 @@ import logging
 import os
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_groq import ChatGroq
 from langchain_ollama import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
 from langchain.memory import SQLiteEntityStore, ConversationBufferMemory
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 class TravelAgent:
 
     def __init__(self):
-        self.llm = OllamaLLM(model="llama3.2:1b")
+        self.llm = ChatGroq(model="llama-3.2-3b-preview")
         
         # Initialize both entity store and conversation memory
         db_path = "travel_entities.db"
