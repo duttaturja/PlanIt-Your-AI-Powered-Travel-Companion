@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -83,9 +82,9 @@ TEMPLATES = [
 
 STATICFILES_DIRS = [STATIC_DIR]
 
-# WSGI_APPLICATION = "planit.wsgi.application"
+WSGI_APPLICATION = "planit.wsgi.application"
 
-ASGI_APPLICATION = "planit.asgi.application"
+# ASGI_APPLICATION = "planit.asgi.application"
 
 
 # Database
