@@ -1,0 +1,1718 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
+
+
+{% block head%}
+    <style>
+        
+        /* Navigation styles */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(37, 99, 235, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Enhanced shadow effects */
+        .shadow-2xl {
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 30px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Feature card hover effects */
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button hover effects */
+        .hover-button {
+            transition: all 0.3s ease;
+        }
+
+        .hover-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Testimonial card styles */
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: scale(1.02);
+        }
+
+        /* Footer styles */
+        .footer-link {
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #60A5FA;
+        }
+
+        /* Add to your existing styles */
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(2) {
+            animation-delay: -2s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-10px) scale(1.05);
+            }
+        }
+        /* @media (min-width: 768px) {
+            #phone-mockup {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            #phone-mockup {
+                margin-left: 90px;
+                margin-top: 80px;
+                margin-bottom: 60px;
+            }
+            #content-container {
+                margin-top: 80px;
+            }
+            #video-content {
+                height: 250px;
+            }
+        } */
+
+        .destination-slide {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .pagination-dot {
+            transition: background-color 0.3s ease;
+        }
+
+        .prev-btn, .next-btn {
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .prev-btn, .next-btn {
+                padding: 0.5rem;
+                margin: 0;
+            }
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .animate-spin-slow {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* hover state animation for the connecting line */
+        @media (min-width: 768px) {
+            .grid:hover .bg-gradient-to-r {
+                background-size: 200% 100%;
+                animation: shimmer 2s linear infinite;
+            }
+
+            @keyframes shimmer {
+                0% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+        }
+
+        .animated-gradient-text {
+            background: linear-gradient(-45deg, #4ade80, #60a5fa, #34d399, #818cf8);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 6s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .rotate-y-3 {
+            transform: rotateY(3deg);
+        }
+
+        .shadow-2xl {
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 30px -12px rgba(0, 0, 0, 0.5),
+                0 0 60px -12px rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-item {
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+        }
+
+        /* Dark theme specific styles */
+        .shadow-2xl {
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 30px -12px rgba(59, 130, 246, 0.2);
+        }
+
+        .testimonial-card {
+            background: linear-gradient(to bottom right, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.95));
+        }
+
+        .animated-gradient-text {
+            background: linear-gradient(-45deg, #60a5fa, #818cf8, #34d399, #818cf8);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 6s ease infinite;
+        }
+
+        /* Update existing animations for dark theme */
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
+        }
+
+        .testimonial-slide {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+        }
+
+        /* Dark theme enhancements */
+        .bg-gradient-overlay {
+            background: linear-gradient(to bottom right, 
+                rgba(17, 24, 39, 0.8), 
+                rgba(17, 24, 39, 0.95)
+            );
+        }
+
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .destination-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, 
+                rgba(0, 0, 0, 0.8) 0%, 
+                transparent 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .destination-card:hover::after {
+            opacity: 1;
+        }
+
+        .testimonial-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .testimonial-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+        }
+
+        #slider {
+            transform: translateX(0);
+            transition: transform 0.5s ease-out;
+        }
+
+        .destination-card {
+            backface-visibility: hidden;
+            -webkit-font-smoothing: subpixel-antialiased;
+        }
+
+        .destination-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (hover: hover) {
+            .destination-card:hover::after {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .answer {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .faq-item button:hover {
+            background-color: #1f2937;
+        }
+
+        .faq-item button.active {
+            background-color: #1f2937;
+        }
+    </style>
+{% endblock head %}
+{% block body %}
+<div class="text-gray-800 w-full bg-black font-sans m-0">
+
+    <!-- Navigation Bar  -->
+    <nav class="bg-blue-600 fixed w-full z-50 top-0 shadow-lg transition-all duration-300 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-white font-bold text-2xl hover:text-blue-200 transition-colors duration-300">
+                        <span class="text-green-400">Plan</span>It
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-6">
+                        <a href="#features " class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Features</a>
+                        <a href="#testimonials" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Testimonials</a>
+                        <a href="#contact" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Contact</a>
+                        <div class="flex items-center space-x-4 ml-6">
+                            <a href="#login" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Login</a>
+                            <a href="#register" class="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" 
+                            class="text-white p-2 rounded-md hover:bg-blue-500 transition-colors duration-300 
+                                   focus:outline-none focus:ring-2 focus:ring-white oveflow-hidden">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-600 border-t border-blue-500">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#features" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Features</a>
+                <a href="#testimonials" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Testimonials</a>
+                <a href="#contact" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Contact</a>
+                <div class="pt-4 pb-3 border-t border-blue-500">
+                    <a href="#login" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Login</a>
+                    <a href="#register" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-r from-black to-gray-800 pt-16 md:pt-0">
+        <div class="relative z-10 container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-8 py-12">
+            <!-- Phone Mockup -->
+            <div class="w-full md:w-1/2 mb-8 md:mb-0">
+                <div id="phone-mockup" class="relative mx-auto max-w-sm lg:ml-48">
+                    <video src="/static/resources/video/Phone.mp4" 
+                           autoplay loop muted playsinline 
+                           class="h-96 object-cover">
+                    </video>
+                </div>
+            </div>
+            
+            <!-- Text Content -->
+            <div class="w-full md:w-1/2 text-center md:text-left  p-8">
+                <h1 class="animated-gradient-text text-4xl md:text-6xl font-bold leading-tight">
+                    Plan Your Next
+                    <span class="block">Adventure with AI</span>
+                </h1>
+                <p class="text-xl text-gray-300 leading-relaxed max-w-2xl animate-fade-in-up">
+                    Experience a seamless way to plan your budget-friendly adventures with AI-powered assistance.
+                </p>
+
+                <!-- Features List -->
+                <div class="space-y-4 py-6">
+                    <div class="feature-item flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-300">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Personalized AI Travel Planning</span>
+                    </div>
+                    <div class="feature-item flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-300">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Budget-Friendly Recommendations</span>
+                    </div>
+                    <div class="feature-item flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-300">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Real-Time Travel Updates</span>
+                    </div>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <a href="#chatUI" 
+                       class="cta-button bg-gradient-to-r from-green-500 to-blue-500 px-8 py-4 rounded-full text-white text-lg 
+                              transform hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/25 
+                              transition-all duration-300 relative overflow-hidden group">
+                        <span class="relative z-10">Start Planning</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    <a href="#demo" 
+                       class="cta-button-secondary px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-lg 
+                              hover:bg-white/20 transform hover:-translate-y-1 transition-all duration-300">
+                        Watch Demo
+                    </a>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div class="flex items-center gap-6 text-gray-400 text-sm pt-8">
+                    <div class="flex items-center gap-2 hover:text-white transition-colors duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span>4.9/5 Rating</span>
+                    </div>
+                    <div class="flex items-center gap-2 hover:text-white transition-colors duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                        </svg>
+                        <span>10k+ Users</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Features Section (Dark Theme) -->
+    <section class="py-12 md:py-20 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Why Choose PlanIt?</h2>
+                <p class="text-gray-400 text-lg">Experience travel planning like never before</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- Feature 1 -->
+                <div class="group p-4 md:p-6 bg-gray-800/30 backdrop-blur-sm rounded-xl">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6 
+                               group-hover:scale-110 transition-transform duration-500">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">AI-Powered Planning</h3>
+                    <p class="text-gray-400 leading-relaxed">Advanced AI algorithms create personalized travel itineraries based on your preferences and budget.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group p-4 md:p-6 bg-gray-800/30 backdrop-blur-sm rounded-xl">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-lg flex items-center justify-center mb-6 
+                               group-hover:scale-110 transition-transform duration-500">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Real-Time Updates</h3>
+                    <p class="text-gray-400 leading-relaxed">Stay informed with live updates on flights, accommodations, and local events during your trip.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group p-4 md:p-6 bg-gray-800/30 backdrop-blur-sm rounded-xl">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-lg flex items-center justify-center mb-6 
+                               group-hover:scale-110 transition-transform duration-500">
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Smart Budgeting</h3>
+                    <p class="text-gray-400 leading-relaxed">Optimize your travel expenses with our intelligent budget allocation and tracking system.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Destinations Section -->
+    <section class="py-20 bg-black relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">Popular Destinations</h2>
+            <p class="text-gray-400 text-center mb-16">Explore our most sought-after travel destinations</p>
+
+            <!-- Destinations Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto" id="destinationsGrid">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Simplified Modal -->
+        <div id="destinationModal" class="fixed inset-0 z-50 hidden opacity-100 transition-opacity duration-200">
+            <div class="relative min-h-screen flex items-center justify-center p-4">
+                <div class="bg-gray-900 rounded-xl w-full max-w-2xl mx-4">
+                    <div id="modalContent" class="p-4 md:p-6">
+                        <!-- Modal content with responsive layout -->
+                        <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                            <!-- Left side - Image -->
+                            <div class="w-full md:w-1/3">
+                                <div class="rounded-lg overflow-hidden">
+                                    <img src="" alt="" class="w-full h-48 object-cover">
+                                </div>
+                                <div class="mt-4">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <span class="text-yellow-400"></span>
+                                            <span class="text-white ml-2"></span>
+                                        </div>
+                                        <span class="text-blue-400 font-semibold"></span>
+                                    </div>
+                                    <p class="text-gray-400 text-sm mt-2"></p>
+                                </div>
+                            </div>
+
+                            <!-- Right side - Details -->
+                            <div class="w-full md:w-2/3 space-y-4">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-white"></h2>
+                                    <p class="text-gray-400"></p>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">About</h3>
+                                    <p class="text-gray-300 text-sm leading-relaxed"></p>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">Best Time to Visit</h3>
+                                    <p class="text-gray-300"></p>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-2">Highlights</h3>
+                                    <ul class="grid grid-cols-2 gap-2"></ul>
+                                </div>
+
+                                <button class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                                             transition-colors duration-300 mt-6">
+                                    <a href="">Plan Your Trip Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">How It Works</h2>
+            <p class="text-gray-400 text-center mb-16">Plan your perfect trip in just a few simple steps</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Step 1 -->
+                <div class="relative group">
+                    <div class="bg-gray-900 rounded-xl p-8 h-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                        <div class="absolute -top-4 left-8 bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                            1
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-xl font-semibold text-white mb-4">Share Your Preferences</h3>
+                            <p class="text-gray-400 mb-4">
+                                Tell us about your travel style, interests, budget, and dates. Our AI understands your unique needs.
+                            </p>
+                            <ul class="text-gray-400 space-y-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Travel dates & duration
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Interests & activities
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Budget preferences
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative group">
+                    <div class="bg-gray-900 rounded-xl p-8 h-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                        <div class="absolute -top-4 left-8 bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                            2
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-xl font-semibold text-white mb-4">AI Creates Your Itinerary</h3>
+                            <p class="text-gray-400 mb-4">
+                                Our AI analyzes millions of data points to create your perfect, personalized travel plan.
+                            </p>
+                            <ul class="text-gray-400 space-y-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Personalized suggestions
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Optimal timing
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Local insights
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative group">
+                    <div class="bg-gray-900 rounded-xl p-8 h-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                        <div class="absolute -top-4 left-8 bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                            3
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="text-xl font-semibold text-white mb-4">Customize & Go</h3>
+                            <p class="text-gray-400 mb-4">
+                                Review, adjust, and finalize your plan. Everything you need is in one place.
+                            </p>
+                            <ul class="text-gray-400 space-y-2">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Easy modifications
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Instant updates
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Ready to explore
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center mt-16">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-8 rounded-lg 
+                             transition-colors duration-300 transform hover:scale-105">
+                    Start Planning Your Trip
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Statistics Section -->
+    <section class="py-20 bg-gray-900" id="statistics">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">Our Impact</h2>
+            <p class="text-gray-400 text-center mb-16">The numbers speak for themselves</p>
+    
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <!-- Happy Travelers -->
+                <div class="text-center group">
+                    <div class="bg-black p-6 rounded-2xl transform transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl font-bold text-blue-500 mb-2">
+                            <span class="counter" data-target="15000">0</span><span>+</span>
+                        </div>
+                        <div class="relative">
+                            <div class="h-1 w-20 bg-blue-500/30 mx-auto mb-4"></div>
+                            <div class="h-1 w-10 bg-blue-500 absolute top-0 left-1/2 -translate-x-1/2 
+                                      group-hover:w-20 transition-all duration-500"></div>
+                        </div>
+                        <p class="text-gray-400 text-sm">Happy Travelers</p>
+                    </div>
+                </div>
+    
+                <!-- Destinations -->
+                <div class="text-center group">
+                    <div class="bg-black p-6 rounded-2xl transform transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl font-bold text-green-500 mb-2">
+                            <span class="counter" data-target="500">0</span><span>+</span>
+                        </div>
+                        <div class="relative">
+                            <div class="h-1 w-20 bg-green-500/30 mx-auto mb-4"></div>
+                            <div class="h-1 w-10 bg-green-500 absolute top-0 left-1/2 -translate-x-1/2 
+                                      group-hover:w-20 transition-all duration-500"></div>
+                        </div>
+                        <p class="text-gray-400 text-sm">Destinations</p>
+                    </div>
+                </div>
+    
+                <!-- Tours Completed -->
+                <div class="text-center group">
+                    <div class="bg-black p-6 rounded-2xl transform transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl font-bold text-purple-500 mb-2">
+                            <span class="counter" data-target="2500">0</span><span>+</span>
+                        </div>
+                        <div class="relative">
+                            <div class="h-1 w-20 bg-purple-500/30 mx-auto mb-4"></div>
+                            <div class="h-1 w-10 bg-purple-500 absolute top-0 left-1/2 -translate-x-1/2 
+                                      group-hover:w-20 transition-all duration-500"></div>
+                        </div>
+                        <p class="text-gray-400 text-sm">Tours Completed</p>
+                    </div>
+                </div>
+
+                <!-- Travel Partners -->
+                <div class="text-center group">
+                    <div class="bg-black p-6 rounded-2xl transform transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl font-bold text-yellow-500 mb-2">
+                            <span class="counter" data-target="150">0</span><span>+</span>
+                        </div>
+                        <div class="relative">
+                            <div class="h-1 w-20 bg-yellow-500/30 mx-auto mb-4"></div>
+                            <div class="h-1 w-10 bg-yellow-500 absolute top-0 left-1/2 -translate-x-1/2 
+                                      group-hover:w-20 transition-all duration-500"></div>
+                        </div>
+                        <p class="text-gray-400 text-sm">Travel Partners</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">What Our Travelers Say</h2>
+            <p class="text-gray-400 text-center mb-16">Real experiences from real adventurers</p>
+
+            <div class="max-w-4xl mx-auto relative">
+                <!-- Navigation Buttons -->
+                <button onclick="previousTestimonial()" 
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-12 
+                               bg-blue-500 p-2 rounded-full hover:bg-blue-600 transition-colors duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+
+                <button onclick="nextTestimonial()" 
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-12 
+                               bg-blue-500 p-2 rounded-full hover:bg-blue-600 transition-colors duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <!-- Testimonial Container -->
+                <div id="testimonialContainer" class="text-center"></div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ Section -->
+    <section class="py-12 md:py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">Frequently Asked Questions</h2>
+            <p class="text-gray-400 text-center mb-16">Everything you need to know about PlanIt AI</p>
+
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
+                <!-- Left Column -->
+                <div class="space-y-4">
+                    <!-- Previous FAQ items 1-5 -->
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">How does PlanIt AI create personalized travel plans?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                PlanIt AI analyzes your preferences, budget, travel dates, and interests using advanced machine learning. It considers factors like your preferred pace of travel, accommodation style, and must-see attractions to create a customized itinerary. The AI also takes into account seasonal factors, local events, and real-time availability to ensure your plan is both personalized and practical.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">Can I modify the AI-generated itinerary?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Absolutely! While PlanIt AI creates an initial itinerary, you have full flexibility to modify any aspect of the plan. You can add or remove activities, adjust timings, or change accommodations. The AI will automatically recalibrate the rest of your itinerary to accommodate these changes while maintaining a coherent travel plan.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">What if I need to plan a trip on a specific budget?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                PlanIt AI excels at budget optimization! Simply input your total budget, and the AI will distribute it efficiently across accommodations, activities, and transportation. It can suggest money-saving alternatives and even highlight free activities while ensuring you don't miss out on essential experiences.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">How up-to-date is the travel information?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Our AI system continuously updates its database with real-time information from reliable sources. This includes current opening hours, pricing, travel restrictions, weather conditions, and local events. We also incorporate recent user feedback to ensure recommendations remain accurate and relevant.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">Can PlanIt AI handle group travel planning?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Yes! PlanIt AI can handle group travel planning by considering multiple preferences and requirements simultaneously. It can suggest activities that appeal to different age groups, accommodate dietary restrictions, and find suitable group accommodations while keeping everyone's budget in mind.
+                            </div>
+                        </button>
+                    </div>
+                </div> 
+
+                <!-- Right Column -->
+                <div class="space-y-4">
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">Can I integrate existing bookings with PlanIt AI?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Absolutely! You can import your existing flight, hotel, or activity bookings, and PlanIt AI will build your itinerary around these fixed points. Simply upload your confirmation emails or manually input your booking details.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">Does PlanIt AI consider seasonal weather patterns?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Yes! The AI analyzes historical weather data and seasonal patterns to suggest the best activities for your travel dates. It also provides backup indoor options for weather-dependent activities and recommends appropriate clothing and gear.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">How does PlanIt AI handle dietary restrictions?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                The AI considers all dietary requirements (vegetarian, vegan, gluten-free, etc.) when suggesting restaurants and food experiences. It also provides local language cards explaining your dietary needs and identifies restaurants with good allergen awareness.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">How does PlanIt AI handle transportation planning?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                The AI plans optimal routes using various transportation options (public transit, rental cars, rideshares, etc.). It considers factors like cost, time efficiency, and your comfort preferences while providing real-time updates about delays or service changes.
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="w-full bg-gray-800 p-6 rounded-lg text-left focus:outline-none group">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-white">Can I share my itinerary with others?</h3>
+                                <span class="transform group-[.active]:rotate-180 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="answer hidden mt-4 text-gray-400">
+                                Right now No, but we are working on it. It will be available soon.
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="py-20 bg-gray-800 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <!-- Section Header -->
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4">Contact Us</h2>
+                    <p class="text-gray-400">Get in touch with us for your next adventure</p>
+                </div>
+                <div class="grid grid-cols-2 gap-8 p-8 rounded-lg pl-12" style="background-image: url('./static/resources/images/contact.jpg'); background-size: cover;">
+                <!-- Contact Form Card -->
+                    <div class="bg-gray-800 rounded-2xl p-8 md:p-12 shadow-xl ">
+                    <form id="contactForm" class="space-y-6">
+                        <!-- Name and Email Row -->
+                        
+                            <div class="space-y-2">
+                                <label for="name" class="text-sm font-medium text-gray-300">Full Name</label>
+                                <input type="text" 
+                                       id="name" 
+                                       name="name" 
+                                       required
+                                       class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
+                                              text-white placeholder-gray-400 focus:outline-none focus:ring-2 
+                                              focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                       placeholder="John Doe">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="email" class="text-sm font-medium text-gray-300">Email Address</label>
+                                <input type="email" 
+                                       id="email" 
+                                       name="email" 
+                                       required
+                                       class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
+                                              text-white placeholder-gray-400 focus:outline-none focus:ring-2 
+                                              focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                                       placeholder="john@example.com">
+                            </div>
+                        <!-- Message -->
+                        <div class="space-y-2">
+                            <label for="message" class="text-sm font-medium text-gray-300">Message</label>
+                            <textarea id="message" 
+                                      name="message" 
+                                      required
+                                      rows="5" 
+                                      class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
+                                             text-white placeholder-gray-400 focus:outline-none focus:ring-2 
+                                             focus:ring-blue-500 focus:border-transparent transition-all duration-300 
+                                             resize-none"
+                                      placeholder="Write your message here..."></textarea>
+                        </div>
+
+                        <!-- Success/Error Messages -->
+                        <div class="hidden" id="successMessage">
+                            <p class="text-green-400 text-sm flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Message sent successfully!
+                            </p>
+                        </div>
+                        <div class="hidden" id="errorMessage">
+                            <p class="text-red-400 text-sm flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Something went wrong. Please try again.
+                            </p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" 
+                                class="w-full py-3 px-6 text-white bg-blue-600 hover:bg-blue-700 rounded-lg 
+                                       font-medium transition-all duration-300 transform hover:scale-[0.99] 
+                                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                                       focus:ring-offset-gray-900">
+                            Send Message
+                        </button>
+                    </form>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Dark Theme) -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white">PlanIt</h3>
+                    <p class="text-gray-400">Your AI-powered travel companion for seamless journey planning.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.354-.714.354l.253-3.647 6.584-5.94c.156-.142-.034-.221-.242-.079L7.65 13.709l-3.596-1.122c-.78-.245-.794-.78.165-1.156l14.065-5.411c.654-.245 1.206.16.955 1.156z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter 
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Stay Updated</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for travel tips and exclusive offers.</p>
+                    <form class="space-y-4">
+                        <input type="email" 
+                               placeholder="Enter your email" 
+                               class="w-full px-4 py-2 rounded-lg bg-gray-900 border border-gray-700 
+                                      text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 
+                                      transition-colors duration-300">
+                        <button type="submit" 
+                                class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                                       transform hover:-translate-y-1 transition-all duration-300">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>-->
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.getElementById('slider');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+            
+            function updateSlider() {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+                updateDots();
+            }
+            
+            function updateDots() {
+                const dots = document.querySelectorAll('.flex.justify-center button');
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.remove('bg-gray-600');
+                        dot.classList.add('bg-blue-500');
+                    } else {
+                        dot.classList.remove('bg-blue-500');
+                        dot.classList.add('bg-gray-600');
+                    }
+                });
+            }
+            
+            prevBtn.addEventListener('click', () => {
+                currentSlide = currentSlide > 0 ? currentSlide - 1 : 1;
+                updateSlider();
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                currentSlide = currentSlide < 1 ? currentSlide + 1 : 0;
+                updateSlider();
+            });
+            
+            window.goToSlide = function(index) {
+                currentSlide = index;
+                updateSlider();
+            }
+        });
+  
+
+    // Initialize EmailJS and handle form submission
+
+    (function() {
+        // Initialize EmailJS with your public key
+        emailjs.init("j5EfIx2wNO3mfyqNq"); // Replace with your actual public key
+
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-2">Sending...</span>
+            `;
+
+            // Get form data
+            const templateParams = {
+                from_name: document.getElementById('name').value,
+                from_email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            // Send email using EmailJS
+            emailjs.send('service_cqt1rvs', 'template_6lq0axz', templateParams)
+                .then(function(response) {
+                    // Show success message
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    document.getElementById('errorMessage').classList.add('hidden');
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                    
+                    // Reset button
+                    submitButton.innerHTML = originalButtonText;
+
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.add('hidden');
+                    }, 5000);
+                }, function(error) {
+                    // Show error message
+                    document.getElementById('errorMessage').classList.remove('hidden');
+                    document.getElementById('successMessage').classList.add('hidden');
+                    
+                    // Reset button
+                    submitButton.innerHTML = originalButtonText;
+
+                    // Hide error message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('errorMessage').classList.add('hidden');
+                    }, 5000);
+                });
+        });
+    })();
+    
+    // Destinations data with image URLs
+    const destinations = {
+        paris: {
+            id: 'paris',
+            name: 'Paris, France',
+            title: 'The City of Light',
+            description: 'Experience the magic of the Eiffel Tower, world-class cuisine, and timeless art at the Louvre. Paris captivates with its charming cafes, historic architecture, and romantic Seine River cruises.',
+            highlights: ['Eiffel Tower', 'Louvre Museum', 'Notre-Dame Cathedral', 'Champs-Élysées', 'Palace of Versailles'],
+            bestTime: 'April to October',
+            image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop',
+            rating: 4.8,
+            reviews: 2500,
+            price: 'From $199'
+        },
+        santorini: {
+            id: 'santorini',
+            name: 'Santorini, Greece',
+            title: 'The Aegean Paradise',
+            description: 'Discover white-washed buildings, blue-domed churches, and spectacular sunsets over the caldera. Santorini offers pristine beaches, ancient ruins, and world-renowned wineries.',
+            highlights: ['Oia Sunset', 'Caldera Views', 'Black Sand Beaches', 'Wine Tasting', 'Ancient Akrotiri'],
+            bestTime: 'June to September',
+            image: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.9,
+            reviews: 3100,
+            price: 'From $249'
+        },
+        kyoto: {
+            id: 'kyoto',
+            name: 'Kyoto, Japan',
+            title: 'The Cultural Heart',
+            description: 'Immerse yourself in traditional Japanese culture with ancient temples, serene gardens, and historic geisha districts. Experience tea ceremonies and seasonal cherry blossoms.',
+            highlights: ['Fushimi Inari Shrine', 'Kinkaku-ji Temple', 'Arashiyama Bamboo Grove', 'Gion District', 'Imperial Palace'],
+            bestTime: 'March to May',
+            image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.7,
+            reviews: 2800,
+            price: 'From $179'
+        },
+        maldives: {
+            id: 'maldives',
+            name: 'Maldives',
+            title: 'Tropical Paradise',
+            description: 'Experience luxury in overwater bungalows, crystal-clear lagoons, and vibrant coral reefs. Perfect for diving, snorkeling, and ultimate relaxation.',
+            highlights: ['Overwater Villas', 'Coral Reefs', 'Water Sports', 'Luxury Spas', 'Sunset Cruises'],
+            bestTime: 'November to April',
+            image: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=2074&auto=format&fit=crop',
+            rating: 4.9,
+            reviews: 3500,
+            price: 'From $399'
+        },
+        capetown: {
+            id: 'capetown',
+            name: 'Cape Town, South Africa',
+            title: 'The Rainbow City',
+            description: 'Where mountains meet the ocean, offering stunning landscapes, rich history, and diverse culture. Explore vibrant neighborhoods, wildlife, and world-class wineries.',
+            highlights: ['Table Mountain', 'Robben Island', 'Cape Peninsula', 'Wine Routes', 'Victoria & Alfred Waterfront'],
+            bestTime: 'October to April',
+            image: 'https://images.unsplash.com/photo-1589871973318-9ca1258faa5d?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.6,
+            reviews: 2200,
+            price: 'From $159'
+        },
+        venice: {
+            id: 'venice',
+            name: 'Venice, Italy',
+            title: 'The Floating City',
+            description: 'Navigate through romantic canals, historic palazzos, and artistic treasures. Experience unique Venetian culture, architecture, and world-famous carnival.',
+            highlights: ['St. Mark\'s Basilica', 'Grand Canal', 'Rialto Bridge', 'Murano Glass', 'Gondola Rides'],
+            bestTime: 'April to June',
+            image: 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.7,
+            reviews: 2900,
+            price: 'From $189'
+        },
+        machu: {
+            id: 'machu',
+            name: 'Machu Picchu, Peru',
+            title: 'The Lost City',
+            description: 'Explore the ancient Incan citadel set high in the Andes Mountains. Marvel at incredible architecture, mountain vistas, and mysterious archaeological wonders.',
+            highlights: ['Inca Trail', 'Sun Gate', 'Temple of the Sun', 'Sacred Valley', 'Huayna Picchu'],
+            bestTime: 'May to October',
+            image: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.8,
+            reviews: 3200,
+            price: 'From $299'
+        },
+        dubai: {
+            id: 'dubai',
+            name: 'Dubai, UAE',
+            title: 'City of the Future',
+            description: 'Experience the ultimate in luxury, futuristic architecture, and desert adventures. Shop in massive malls, stay in spectacular hotels, and enjoy year-round sunshine.',
+            highlights: ['Burj Khalifa', 'Palm Jumeirah', 'Desert Safari', 'Dubai Mall', 'Miracle Garden'],
+            bestTime: 'November to March',
+            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop',
+            rating: 4.7,
+            reviews: 3300,
+            price: 'From $279'
+        },
+        queenstown: {
+            id: 'queenstown',
+            name: 'Queenstown, New Zealand',
+            title: 'Adventure Capital',
+            description: 'Surrounded by mountains and set on Lake Wakatipu, Queenstown is a hub for adventure sports, stunning landscapes, and Lord of the Rings filming locations.',
+            highlights: ['Bungee Jumping', 'Milford Sound', 'Ski Resorts', 'Lake Wakatipu', 'Skyline Gondola'],
+            bestTime: 'December to February',
+            image: 'https://images.unsplash.com/photo-1589871973318-9ca1258faa5d?q=80&w=2074&auto=format&fit=crop',
+            rating: 4.8,
+            reviews: 2400,
+            price: 'From $219'
+        }
+    };
+
+    // Function to render destination cards - simplified version
+    function renderDestinationCards() {
+        const container = document.getElementById('destinationsGrid');
+        
+        container.innerHTML = Object.values(destinations)
+            .map(destination => `
+                <div class="cursor-pointer transform transition-all duration-500 hover:-translate-y-2" onclick="openModal('${destination.id}')">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 
+                                relative group">
+                        <!-- Image Container -->
+                        <div class="relative h-72 overflow-hidden">
+                            <img src="${destination.image}" 
+                                 alt="${destination.name}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent
+                                      transition-opacity duration-500 group-hover:opacity-90">
+                                <div class="absolute bottom-4 left-4 right-4 transform transition-all duration-500
+                                          group-hover:translate-y-[-8px]">
+                                    <h3 class="text-2xl font-bold text-white mb-1 drop-shadow-lg">${destination.name}</h3>
+                                    <p class="text-gray-100 drop-shadow-lg font-medium">${destination.title}</p>
+                                    <p class="text-blue-300 font-semibold mt-2 drop-shadow-lg 
+                                              opacity-0 group-hover:opacity-100 transform translate-y-2 
+                                              group-hover:translate-y-0 transition-all duration-500">
+                                        ${destination.price}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    // Modal functions
+    function openModal(destinationId) {
+        const destination = destinations[destinationId];
+        const modal = document.getElementById('destinationModal');
+        
+        // Update modal content
+        const modalContent = modal.querySelector('#modalContent');
+        modalContent.innerHTML = `
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 relative">
+                <!-- Close button - Moved inside content for better positioning -->
+                <button onclick="closeModal()" 
+                        class="absolute -top-2 -right-2 p-2 bg-gray-800 text-gray-400 hover:text-white rounded-full transition-all duration-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <!-- Left side - Image -->
+                <div class="w-full md:w-1/3">
+                    <div class="rounded-lg overflow-hidden shadow-lg">
+                        <img src="${destination.image}" 
+                             alt="${destination.name}" 
+                             class="w-full h-48 md:h-64 object-cover transform hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="mt-4 bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm space-y-3">
+                        <!-- Ratings Row -->
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                ${Array(5).fill().map((_, i) => `
+                                    <svg class="w-5 h-5 ${i < destination.rating ? 'text-yellow-400' : 'text-gray-600'}" 
+                                         fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                    </svg>
+                                `).join('')}
+                            </div>
+                            <span class="text-white text-sm font-medium">(${destination.reviews} reviews)</span>
+                        </div>
+                    
+                        <!-- Price Row -->
+                        <div class="flex items-center">
+                            <span class="text-blue-400 font-semibold bg-blue-500/10 px-4 py-2 rounded-lg w-full text-center">
+                                Starts ${destination.price}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side - Details -->
+                <div class="w-full md:w-2/3 space-y-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">${destination.name}</h2>
+                        <p class="text-gray-400">${destination.title}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">About</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">${destination.description}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Best Time to Visit</h3>
+                        <p class="text-gray-300">${destination.bestTime}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Highlights</h3>
+                        <ul class="grid grid-cols-2 gap-2">
+                            ${destination.highlights.map(highlight => `
+                                <li class="text-gray-300 text-sm flex items-center">
+                                    <svg class="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    ${highlight}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <button onclick="window.location.href='/core'" 
+                            class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                                   transition-colors duration-300 mt-6 flex items-center justify-center gap-2">
+                        <span>Plan Your Trip Now</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Show modal with animation
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+        }, 10);
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+
+        // Add escape key listener
+        document.addEventListener('keydown', handleEscKey);
+        
+        // Add click outside listener
+        modal.addEventListener('click', handleOutsideClick);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('destinationModal');
+        
+        // Add closing animation
+        modal.classList.add('opacity-0');
+        modal.classList.remove('opacity-100');
+        
+        // Hide modal after animation
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            // Reset body scroll
+            document.body.style.overflow = '';
+        }, 300);
+
+        // Remove event listeners
+        document.removeEventListener('keydown', handleEscKey);
+        modal.removeEventListener('click', handleOutsideClick);
+    }
+
+    // Handle escape key press
+    function handleEscKey(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    }
+
+    // Handle click outside modal
+    function handleOutsideClick(e) {
+        if (e.target.id === 'destinationModal') {
+            closeModal();
+        }
+    }
+
+    // Enhanced event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        renderDestinationCards();
+
+        // Close on escape key with visual feedback
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const closeButton = document.querySelector('#destinationModal button');
+                if (closeButton) {
+                    closeButton.classList.add('scale-90');
+                    setTimeout(() => closeButton.classList.remove('scale-90'), 100);
+                    closeModal();
+                }
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200; // Animation duration in milliseconds
+
+        const animateCounter = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            let count = 0;
+            
+            const updateCount = () => {
+                const increment = target / speed;
+                
+                if (count < target) {
+                    count += increment;
+                    counter.innerText = Math.ceil(count);
+                    requestAnimationFrame(updateCount);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+
+            updateCount();
+        };
+
+        // Intersection Observer for counter animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => observer.observe(counter));
+    });
+    // Testimonials data
+    const testimonials = [
+        {
+            id: 1,
+            name: "Sarah Johnson",
+            role: "First-time AI User",
+            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
+            content: "I was skeptical about using AI for trip planning, but PlanIt AI made it incredibly easy! It understood my preferences perfectly and created an itinerary that felt personally crafted for me. Saved me hours of research!",
+            rating: 5
+        },
+        {
+            id: 2,
+            name: "Michael Chen",
+            role: "Business Traveler",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop",
+            content: "As someone who travels frequently for work, PlanIt AI has been a game-changer. It efficiently balanced my business meetings with local experiences, even suggesting perfect spots for client dinners!",
+            rating: 5
+        },
+        {
+            id: 3,
+            name: "Emma Rodriguez",
+            role: "Family Vacation Planner",
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1887&auto=format&fit=crop",
+            content: "Planning a family trip with three kids used to be overwhelming. PlanIt AI suggested kid-friendly activities, convenient meal spots, and even factored in nap times! It thought of details I would have missed.",
+            rating: 5
+        },
+        {
+            id: 4,
+            name: "David Wilson",
+            role: "Adventure Seeker",
+            image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop",
+            content: "The AI understood my love for off-beat adventures perfectly! It created a unique itinerary mixing popular spots with hidden gems. The local insights and timing suggestions were spot on!",
+            rating: 5
+        },
+        {
+            id: 5,
+            name: "Lisa Thompson",
+            role: "Budget Traveler",
+            image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop",
+            content: "PlanIt AI helped me maximize my limited budget without compromising on experiences. It suggested great value accommodations and free activities I wouldn't have found otherwise. Brilliant tool!",
+            rating: 5
+        },
+        {
+            id: 6,
+            name: "James Parker",
+            role: "Luxury Travel Enthusiast",
+            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1887&auto=format&fit=crop",
+            content: "The AI's recommendations for luxury experiences were exceptional! From exclusive restaurants to boutique hotels, every suggestion aligned perfectly with my high-end preferences. Worth every penny!",
+            rating: 5
+        },
+        {
+            id: 7,
+            name: "Nina Patel",
+            role: "Solo Female Traveler",
+            image: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?q=80&w=1887&auto=format&fit=crop",
+            content: "Safety was my primary concern, and PlanIt AI took that seriously. It suggested well-reviewed areas, provided safety tips, and planned activities that made me feel secure while traveling alone.",
+            rating: 5
+        },
+        {
+            id: 8,
+            name: "Tom Anderson",
+            role: "Last-Minute Planner",
+            image: "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=1887&auto=format&fit=crop",
+            content: "Had to plan a trip in 24 hours - PlanIt AI was a lifesaver! It quickly generated a realistic itinerary considering available bookings and time constraints. Couldn't have done it without this tool!",
+            rating: 5
+        }
+    ];
+
+    let currentTestimonialIndex = 0;
+
+    function renderTestimonial(index) {
+        const testimonial = testimonials[index];
+        const container = document.getElementById('testimonialContainer');
+        
+        const starsHTML = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+        
+        container.innerHTML = `
+            <div class="fade-in">
+                <div class="relative">
+                    <img src="${testimonial.image}" 
+                         alt="${testimonial.name}" 
+                         class="w-20 h-20 rounded-full mx-auto mb-4 object-cover">
+                </div>
+                <div class="text-yellow-400 text-xl mb-4">${starsHTML}</div>
+                <p class="text-gray-300 mb-6 italic">"${testimonial.content}"</p>
+                <h4 class="text-white font-semibold text-lg">${testimonial.name}</h4>
+                <p class="text-blue-400">${testimonial.role}</p>
+            </div>
+        `;
+    }
+
+    function nextTestimonial() {
+        currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+        renderTestimonial(currentTestimonialIndex);
+    }
+
+    function previousTestimonial() {
+        currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+        renderTestimonial(currentTestimonialIndex);
+    }
+
+    // Auto-rotate testimonials
+    let testimonialInterval = setInterval(nextTestimonial, 5000);
+
+    // Initialize first testimonial
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTestimonial(0);
+    });    
+     //for FAQ functionality 
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqItems = document.querySelectorAll('.faq-item button');
+        
+        faqItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const answer = item.querySelector('.answer');
+                const isOpen = item.classList.contains('active');
+                
+                // Close all FAQs
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.answer').style.maxHeight = null;
+                    otherItem.querySelector('.answer').classList.add('hidden');
+                });
+                
+                // Open clicked FAQ if it wasn't open
+                if (!isOpen) {
+                    item.classList.add('active');
+                    answer.classList.remove('hidden');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        });
+    });
+    </script>
+</div>
+{% endblock body %}
