@@ -460,7 +460,7 @@
     </header>
     <!-- Features Section (Dark Theme) -->
     <section class="py-12 md:py-20 bg-gradient-to-b from-black to-gray-900">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto px-8">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-white mb-4">Why Choose PlanIt?</h2>
                 <p class="text-gray-400 text-lg">Experience travel planning like never before</p>
@@ -981,7 +981,7 @@
 
 
     <!-- Contact Us Section -->
-    <section id="contact" class="py-20 bg-black relative">
+    <section id="contact" class="py-20 bg-gray-800 relative">
         <div class="container mx-auto px-4">
             <div class="max-w-5xl mx-auto">
                 <!-- Section Header -->
@@ -989,19 +989,19 @@
                     <h2 class="text-4xl font-bold text-white mb-4">Contact Us</h2>
                     <p class="text-gray-400">Get in touch with us for your next adventure</p>
                 </div>
-
+                <div class="grid grid-cols-2 gap-8 p-8 rounded-lg pl-12" style="background-image: url('./static/resources/images/contact.jpg'); background-size: cover;">
                 <!-- Contact Form Card -->
-                <div class="bg-gray-900 rounded-2xl p-8 md:p-12 shadow-xl">
+                    <div class="bg-gray-800 rounded-2xl p-8 md:p-12 shadow-xl ">
                     <form id="contactForm" class="space-y-6">
                         <!-- Name and Email Row -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
                             <div class="space-y-2">
                                 <label for="name" class="text-sm font-medium text-gray-300">Full Name</label>
                                 <input type="text" 
                                        id="name" 
                                        name="name" 
                                        required
-                                       class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 
+                                       class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
                                               text-white placeholder-gray-400 focus:outline-none focus:ring-2 
                                               focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                        placeholder="John Doe">
@@ -1012,12 +1012,11 @@
                                        id="email" 
                                        name="email" 
                                        required
-                                       class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 
+                                       class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
                                               text-white placeholder-gray-400 focus:outline-none focus:ring-2 
                                               focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                        placeholder="john@example.com">
                             </div>
-                        </div>
                         <!-- Message -->
                         <div class="space-y-2">
                             <label for="message" class="text-sm font-medium text-gray-300">Message</label>
@@ -1025,7 +1024,7 @@
                                       name="message" 
                                       required
                                       rows="5" 
-                                      class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 
+                                      class="w-full px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 
                                              text-white placeholder-gray-400 focus:outline-none focus:ring-2 
                                              focus:ring-blue-500 focus:border-transparent transition-all duration-300 
                                              resize-none"
@@ -1059,6 +1058,8 @@
                             Send Message
                         </button>
                     </form>
+                    </div>
+                    <div></div>
                 </div>
             </div>
         </div>
@@ -1134,7 +1135,7 @@
             
             <!-- Bottom Bar -->
             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-gray-400">&copy; 2024 PlanIt. All rights reserved.</p>
+                <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
             </div>
         </div>
     </footer>
