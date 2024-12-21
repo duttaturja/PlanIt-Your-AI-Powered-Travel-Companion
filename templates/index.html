@@ -5,16 +5,16 @@
 
 {% block body %}
 <div class="min-h-screen bg-gradient-to-b from-background to-card">
-    <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto px-4 py-2">
         <!-- Chat Container -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="rounded-lg  overflow-hidden">
             <!-- Chat Header -->
-            <div class="bg-accent p-4 text-white">
+            <div class="p-4 text-white">
                 <div class="flex items-center gap-3">
-                    <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Logo" class="w-10 h-10 rounded-full">
+                    <!-- <img src="{% static 'images/planit-avatar.png' %}" alt="PlanIt Logo" class="w-10 h-10 rounded-full"> -->
                     <div>
-                        <h1 class="text-xl font-bold">PlanIt</h1>
-                        <p class="text-sm opacity-90">Your AI Travel Companion</p>
+                        <h1 class="text-xl font-semibold text-gray-400">PlanIt v0.0.1</h1>
+                        <!-- <p class="text-sm opacity-90">Your AI Travel Companion</p> -->
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
             <div class="h-[60vh] overflow-y-auto p-4 space-y-4" id="messages">
                 {% if not messages %}
                     <!-- Welcome Message -->
-                    <div class="bg-background rounded-lg p-6 shadow-sm">
+                    <div class="rounded-lg p-6 shadow-sm">
                         <h2 class="text-2xl font-bold text-accent mb-4">Welcome to PlanIt!</h2>
                         <p class="text-gray-600 mb-6">Ready to plan your next adventure? Here are some ways I can help:</p>
                         
@@ -33,7 +33,7 @@
                                 <input type="hidden" name="message" value="Plan a weekend getaway to a nearby city with cultural attractions">
                                 <button type="submit" 
                                     class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
-                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                            hover:bg-accent/5 transition-all duration-200">
                                     <div class="font-semibold text-accent">Weekend Getaway</div>
                                     <p class="text-sm text-gray-600 mt-1">Discover a perfect weekend escape</p>
                                 </button>
@@ -44,7 +44,7 @@
                                 <input type="hidden" name="message" value="Suggest an adventurous 1-week itinerary in Costa Rica">
                                 <button type="submit"
                                     class="w-full p-4 text-left rounded-lg border-2 border-accent/20 hover:border-accent 
-                                           bg-white hover:bg-accent/5 transition-all duration-200">
+                                            hover:bg-accent/5 transition-all duration-200">
                                     <div class="font-semibold text-accent">Adventure Trip</div>
                                     <p class="text-sm text-gray-600 mt-1">Plan an exciting adventure abroad</p>
                                 </button>
@@ -76,7 +76,7 @@
                                  class="w-8 h-8 rounded-full">
                         {% endif %}
                         
-                        <div class="{% if message.role == 'user' %}bg-accent text-white{% else %}bg-gray-100 text-gray-800{% endif %} 
+                        <div class="content {% if message.role == 'user' %} text-white bg-gray-800{% else %} text-gray-100{% endif %} 
                                     rounded-2xl px-4 py-2 max-w-[80%] shadow-sm">
                             <p class="whitespace-pre-wrap">{{ message.content }}</p>
                         </div>
@@ -88,15 +88,35 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+                <div class="flex items-center space-x-4 shadow-sm">
+                    <!-- Listen Button -->
+                    <button id="listen-button" class="flex items-center text-white px-4 py-2 rounded-md hover:bg-slate-700 focus:outline-none">
+                        <svg class="w-[30px] h-[30px]" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000" transform="matrix(1, 0, 0, 1, 0, 0)">
+
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                            
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <g id="SVGRepo_iconCarrier"> <title>voice_line</title> <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Media" transform="translate(-960.000000, -96.000000)" fill-rule="nonzero"> <g id="voice_line" transform="translate(960.000000, 96.000000)"> <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"> </path> <path d="M12,3 C12.51285,3 12.9355092,3.38604429 12.9932725,3.88337975 L13,4 L13,20 C13,20.5523 12.5523,21 12,21 C11.48715,21 11.0644908,20.613973 11.0067275,20.1166239 L11,20 L11,4 C11,3.44772 11.4477,3 12,3 Z M8,6 C8.55228,6 9,6.44772 9,7 L9,17 C9,17.5523 8.55228,18 8,18 C7.44772,18 7,17.5523 7,17 L7,7 C7,6.44772 7.44772,6 8,6 Z M16,6 C16.5523,6 17,6.44772 17,7 L17,17 C17,17.5523 16.5523,18 16,18 C15.4477,18 15,17.5523 15,17 L15,7 C15,6.44772 15.4477,6 16,6 Z M4,9 C4.55228,9 5,9.44772 5,10 L5,14 C5,14.5523 4.55228,15 4,15 C3.44772,15 3,14.5523 3,14 L3,10 C3,9.44772 3.44772,9 4,9 Z M20,9 C20.51285,9 20.9355092,9.38604429 20.9932725,9.88337975 L21,10 L21,14 C21,14.5523 20.5523,15 20,15 C19.48715,15 19.0644908,14.613973 19.0067275,14.1166239 L19,14 L19,10 C19,9.44772 19.4477,9 20,9 Z" id="形状" fill="#ffffff"> </path> </g> </g> </g> </g>
+                            
+                            </svg>                        
+                      </button>
+                    
+                  
+                    <!-- Audio Player -->
+                    <audio id="audio-player" controls class="hidden w-full max-w-xs bg-dark-blue h-8 outline-none"></audio>
+                </div>
+                  
+                                    
             </div>
 
             <!-- Input Area -->
-            <div class="border-t border-gray-200 p-4 bg-white">
+            <div class="rounded-lg">
                 <form method="POST" class="relative">
                     {% csrf_token %}
                     <textarea name="message" 
                             rows="3"
-                            class="w-full px-4 py-3 pr-12 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white resize-none"
+                            class="w-full px-4 py-3 pr-12 text-white bg-gray-800 rounded-lg focus:outline-none resize-none"
                             placeholder="Ask me about your travel plans..."
                             required></textarea>
                     <button type="submit"
@@ -106,9 +126,9 @@
                         </svg>
                     </button>
                 </form>
-                <p class="mt-2 text-xs text-center text-gray-500">
+                <!-- <p class="mt-2 text-xs text-center text-gray-500">
                     Always verify important travel details and requirements.
-                </p>
+                </p> -->
             </div>
         </div>
     </div>
@@ -154,6 +174,7 @@ textarea {
     min-height: 60px;
     max-height: 150px;
 }
+
 </style>
 
 <script>
@@ -168,4 +189,32 @@ textarea.addEventListener('input', function() {
     this.style.height = (this.scrollHeight) + 'px';
 });
 </script>
+<script>
+    document.getElementById("listen-button").addEventListener("click", function () {
+        const blogContentElements = document.getElementsByClassName("content");
+        const blogContent = blogContentElements[blogContentElements.length - 1].innerText;
+        // blogContent = "Hi, I am PlanIt. I will be your travel companion. How can I help you today?"
+  
+      fetch("http://127.0.0.1:8000/core/read-blog/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token for Django
+        },
+        body: JSON.stringify({ content: blogContent }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.audio_url) {
+            const audioPlayer = document.getElementById("audio-player");
+            audioPlayer.src = data.audio_url;
+            // audioPlayer.style.display = "block";
+            audioPlayer.play();
+          } else {
+            alert("Error: Could not generate audio.");
+          }
+        });
+    });
+  </script>
+  
 {% endblock body %}

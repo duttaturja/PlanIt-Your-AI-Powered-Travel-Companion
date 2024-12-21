@@ -4,3 +4,5 @@ bun.lockb
 package-lock.json
 *.pyc
 Agent/test/*
+Media/*
+db.sqlite3

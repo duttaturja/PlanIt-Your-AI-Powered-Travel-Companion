@@ -12,3 +12,4 @@ faiss-cpu
 python-dotenv
 duckduckgo-search
 langchain-groq
+pyttsx3

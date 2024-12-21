@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Audio Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#1A2231] flex items-center justify-center min-h-screen">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-96">
+        <div class="mb-4">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Audio Player</h2>
+        </div>
+        
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="flex-shrink-0">
+                <img src="album-cover.jpg" alt="Album Cover" class="w-16 h-16 rounded-md object-cover">
+            </div>
+            <div class="flex-grow">
+                <h3 class="text-md font-semibold text-gray-700 dark:text-gray-200">Song Title</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Artist Name</p>
+            </div>
+        </div>
+
+        <audio 
+            controls 
+            class="w-full mb-4 
+                    [&::-webkit-media-controls-enclosure]:bg-white 
+                    [&::-webkit-media-controls-enclosure]:dark:bg-gray-700
+                    [&::-webkit-media-controls-panel]:bg-white 
+                    [&::-webkit-media-controls-panel]:dark:bg-gray-700
+                    [&::-webkit-media-controls-current-time-display]:text-gray-800 
+                    [&::-webkit-media-controls-current-time-display]:dark:text-white
+                    [&::-webkit-media-controls-time-remaining-display]:text-gray-800 
+                    [&::-webkit-media-controls-time-remaining-display]:dark:text-white"
+        >
+            <source src="your-audio-file.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <div class="flex justify-between items-center">
+            <button class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+            </button>
+            <div class="flex space-x-4">
+                <button class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <button class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

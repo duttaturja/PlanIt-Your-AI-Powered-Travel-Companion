@@ -7,19 +7,24 @@ import logging
 import os
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from langchain_groq import ChatGroq
+# from langchain_groq import ChatGroq
 from langchain_ollama import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
 from langchain.memory import SQLiteEntityStore, ConversationBufferMemory
-
-# Configure logging
+from langchain.llms import OpenAI# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class TravelAgent:
 
     def __init__(self):
-        self.llm = ChatGroq(model="llama-3.2-3b-preview")
+        # self.llm = ChatGroq(model="llama-3.2-3b-preview")
+        self.llm = OllamaLLM(model="llama3.2:1b")
+        # self.llm = OpenAI(
+        #     api_key="6defa90e7edf4d5ba0794a2a49a7091c",
+        #     base_url="https://api.aimlapi.com",
+        # )
+
         
         # Initialize both entity store and conversation memory
         db_path = "travel_entities.db"
@@ -37,7 +42,7 @@ class TravelAgent:
         
         self.prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content=(
-                "You are PlanIT, an expert AI travel companion. "
+                "You are PlanIt, an expert AI travel companion. "
                 "Help users plan their trips by providing detailed, "
                 "personalized travel recommendations and itineraries. "
                 "Focus on understanding the user's travel preferences, "
@@ -172,7 +177,7 @@ class TravelAgent:
 
 if __name__ == "__main__":
     agent = TravelAgent()
-    print("\nWelcome to PlanIT - Your AI Travel Companion!")
+    print("\nWelcome to PlanIt - Your AI Travel Companion!")
     print("Type 'exit', 'quit', or 'bye' to end the conversation.\n")
     print("Agent: Hello! I'm here to help plan your next adventure. What kind of trip are you thinking about?")
     
