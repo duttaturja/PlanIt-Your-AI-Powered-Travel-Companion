@@ -4,12 +4,12 @@
 {% block title %}PlanIt - Your AI Travel Companion{% endblock title %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
+<div class="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 pt-16">
     <div class="max-w-4xl mx-auto px-4 py-2">
         <!-- Chat Container -->
         <div class="rounded-lg overflow-hidden bg-gray-800 shadow-lg">
             <!-- Chat Header -->
-            <div class="p-4 text-gray-200 bg-gray-900 border-b border-gray-700">
+            <div class="p-4 text-gray-100 bg-gray-900 border-b border-gray-700">
                 <div class="flex items-center gap-3">
                     <div>
                         <h1 class="text-xl font-semibold text-gray-300">PlanIt v0.0.1</h1>
@@ -21,8 +21,8 @@
             <div class="h-[60vh] overflow-y-auto p-4 space-y-4" id="messages">
                 {% if not messages %}
                     <!-- Welcome Message -->
-                    <div class="rounded-lg p-6 shadow-sm bg-gray-700">
-                        <h2 class="text-2xl font-bold text-accent mb-4">Welcome to PlanIt!</h2>
+                    <div class="rounded-lg p-6 shadow-sm bg-gray-800 text-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-500 mb-4">Welcome to PlanIt!</h2>
                         <p class="text-gray-400 mb-6">Ready to plan your next adventure? Here are some ways I can help:</p>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -74,7 +74,7 @@
                                  class="w-8 h-8 rounded-full">
                         {% endif %}
 
-                        <div class="content {% if message.role == 'user' %} text-gray-200 bg-gray-700{% else %} text-gray-300 bg-gray-600{% endif %} 
+                        <div class="content {% if message.role == 'user' %} text-gray-200 bg-gray-700{% else %} text-gray-200 bg-gray-700{% endif %} 
                                     rounded-2xl px-4 py-2 max-w-[80%] shadow-sm">
                             <p class="whitespace-pre-wrap">{{ message.content }}</p>
                         </div>
@@ -102,14 +102,14 @@
             </div>
 
             <!-- Input Area -->
-            <div class="rounded-lg bg-gray-900 border-t border-gray-700">
+            <div class="rounded-lg bg-gray-900 m-2 border-t border-gray-700">
                 <form method="POST" class="relative" id="voice-form">
                     {% csrf_token %}
                     <textarea
                         name="message"
                         id="message-input"
-                        rows="3"
-                        class="w-full px-4 py-3 pr-12 text-gray-200 bg-gray-800 rounded-lg focus:outline-none resize-none"
+                        rows="2"
+                        class="w-full px-4 py-2 pr-24 text-gray-100 bg-gray-900 rounded-lg focus:outline-none resize-none"
                         placeholder="Ask me about your travel plans..."
                         required
                     ></textarea>
@@ -117,17 +117,9 @@
                     <!-- Submit Button -->
                     <button
                         type="submit"
-                        class="absolute right-3 bottom-3 p-2 text-gray-200 bg-accent rounded-full hover:bg-accent-dark transition-colors"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
-                            />
+                        class="absolute ml-2 right-2 bottom-4 p-2 text-gray-100 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                         </svg>
                     </button>
 
@@ -135,9 +127,19 @@
                     <button
                         type="button"
                         id="voice-button"
-                        class="absolute right-14 bottom-3 p-2 text-gray-200 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
-                    >
-                        🎙️
+                        class="absolute right-14 bottom-4 text-gray-100 p-1 bg-blue-700 rounded-full transition-colors flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+                            <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                                <circle cx="45" cy="45" r="45" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(29 78 216); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>
+                                <path d="M 20.568 52.701 c -1.104 0 -2 -0.896 -2 -2 V 39.299 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 11.402 C 22.568 51.806 21.673 52.701 20.568 52.701 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 28.712 64.917 c -1.104 0 -2 -0.896 -2 -2 V 27.083 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 35.833 C 30.712 64.021 29.816 64.917 28.712 64.917 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 36.856 77.133 c -1.104 0 -2 -0.896 -2 -2 V 14.867 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 60.266 C 38.856 76.237 37.96 77.133 36.856 77.133 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 45 64.917 c -1.104 0 -2 -0.896 -2 -2 V 27.083 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 35.833 C 47 64.021 46.104 64.917 45 64.917 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 53.144 52.701 c -1.104 0 -2 -0.896 -2 -2 V 39.299 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 11.402 C 55.144 51.806 54.248 52.701 53.144 52.701 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 61.288 64.917 c -1.104 0 -2 -0.896 -2 -2 V 27.083 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 35.833 C 63.288 64.021 62.393 64.917 61.288 64.917 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                                <path d="M 69.432 52.701 c -1.104 0 -2 -0.896 -2 -2 V 39.299 c 0 -1.104 0.896 -2 2 -2 s 2 0.896 2 2 v 11.402 C 71.432 51.806 70.536 52.701 69.432 52.701 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+                            </g>
+                        </svg>
                     </button>
                 </form>
 
@@ -151,9 +153,10 @@
                         <div class="mt-4">
                             <button
                                 id="stop-voice"
-                                class="p-2 bg-red-600 text-gray-200 rounded-full hover:bg-red-700"
-                            >
-                                <!-- 🛑 Stop -->
+                                class="p-2 bg-red-600 text-gray-200 rounded-full hover:bg-red-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 10a2 2 0 114 0 2 2 0 01-4 0z" clip-rule="evenodd" />
+                                </svg>
                             </button>
                         </div>
                     </div>
