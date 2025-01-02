@@ -84,24 +84,6 @@
                 transform: translateY(-10px) scale(1.05);
             }
         }
-        /* @media (min-width: 768px) {
-            #phone-mockup {
-                margin-left: 0;
-            }
-        }
-        @media (max-width: 480px) {
-            #phone-mockup {
-                margin-left: 90px;
-                margin-top: 80px;
-                margin-bottom: 60px;
-            }
-            #content-container {
-                margin-top: 80px;
-            }
-            #video-content {
-                height: 250px;
-            }
-        } */
 
         .destination-slide {
             transition: opacity 0.5s ease-in-out;
@@ -351,8 +333,8 @@
                         <a href="#testimonials" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Testimonials</a>
                         <a href="#contact" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Contact</a>
                         <div class="flex items-center space-x-4 ml-6">
-                            <a href="#login" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Login</a>
-                            <a href="#register" class="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Register</a>
+                            <a href="/accounts/login" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Login</a>
+                            <a href="/accounts/register" class="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Register</a>
                         </div>
                     </div>
                 </div>
@@ -373,8 +355,8 @@
                 <a href="#testimonials" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Testimonials</a>
                 <a href="#contact" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Contact</a>
                 <div class="pt-4 pb-3 border-t border-blue-500">
-                    <a href="#login" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Login</a>
-                    <a href="#register" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Register</a>
+                    <a href="/accounts/login" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Login</a>
+                    <a href="/accounts/register" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Register</a>
                 </div>
             </div>
         </div>
@@ -1068,11 +1050,11 @@
     <!-- Footer (Dark Theme) -->
     <footer class="bg-black py-12 border-t border-gray-800">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="grid md:grid-cols-4 gap-12">
                 <!-- Company Info -->
                 <div class="space-y-4">
                     <h3 class="text-2xl font-bold text-white">PlanIt</h3>
-                    <p class="text-gray-400">Your AI-powered travel companion for seamless journey planning.</p>
+                    <p class="text-gray-400">Your AI-powered travel companion.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -1084,9 +1066,9 @@
                                 <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
                             </svg>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                        <a href="https://github.com/duttaturja/PlanIt-Your-AI-Powered-Travel-Companion" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.354-.714.354l.253-3.647 6.584-5.94c.156-.142-.034-.221-.242-.079L7.65 13.709l-3.596-1.122c-.78-.245-.794-.78.165-1.156l14.065-5.411c.654-.245 1.206.16.955 1.156z"/>
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.263.82-.582 0-.287-.01-1.047-.016-2.055-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.332-1.755-1.332-1.755-1.09-.744.082-.729.082-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.805 1.305 3.49.997.108-.776.418-1.305.76-1.605-2.665-.3-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.236-3.22-.124-.303-.536-1.523.116-3.176 0 0 1.01-.323 3.3 1.23.958-.266 1.984-.398 3.004-.403 1.02.005 2.046.137 3.005.403 2.29-1.554 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.807 5.624-5.48 5.92.43.37.812 1.102.812 2.222 0 1.606-.014 2.903-.014 3.293 0 .322.216.7.825.581C20.565 21.796 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
                             </svg>
                         </a>
                     </div>
@@ -1108,8 +1090,8 @@
                     <h4 class="text-lg font-semibold text-white mb-4">Support</h4>
                     <ul class="space-y-2">
                         <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Help Center</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Terms of Service</a></li>
+                        <li><a href="/privacy_policy" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Privacy Policy</a></li>
+                        <li><a href="/terms_of_service" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">Terms of Service</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">FAQ</a></li>
                     </ul>
                 </div>
@@ -1133,10 +1115,11 @@
                 </div>
             </div>-->
             
-            <!-- Bottom Bar -->
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
-            </div>
+            
+        </div>
+        <!-- Bottom Bar -->
+        <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+            <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
         </div>
     </footer>
 
