@@ -5,7 +5,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="max-w-md w-full space-y-8 bg-card p-8 rounded-lg border border-border">
+<div class="mt-24 max-w-md w-full space-y-8 bg-card p-8 rounded-lg border border-border">
     <div>
         <h2 class="mt-6 text-center text-3xl font-bold text-copy-primary">
             Sign Up
@@ -46,42 +46,42 @@
             <div>
                 <label for="id_email" class="sr-only">Email address</label>
                 <input id="id_email" name="email" type="email" autocomplete="email" required
-                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent focus:bg-background"
                     placeholder="Email address">
             </div>
             <div>
                 <label for="id_password1" class="sr-only">Password</label>
                 <input id="id_password1" name="password1" type="password" required
-                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     placeholder="Password">
             </div>
             <div>
                 <label for="id_password2" class="sr-only">Confirm Password</label>
                 <input id="id_password2" name="password2" type="password" required
-                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-cta focus:border-transparent"
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     placeholder="Confirm Password">
             </div>
         </div>
 
         <div>
             <button type="submit"
-                class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-cta-text bg-cta hover:bg-cta-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                    <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    <!-- <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                             clip-rule="evenodd" />
-                    </svg>
+                    </svg> -->
                 </span>
                 Sign up
             </button>
         </div>
     </form>
 
-    <p class="mt-8 text-center text-sm text-copy-secondary">
+    <p class="mt-8 text-center text-sm text-gray-400">
         Already have an account?
-        <a href="{{ login_url }}" class="font-medium text-cta hover:text-cta-active">
+        <a href="{{ login_url }}" class="font-medium text-blue-600 hover:text-blue-800">
             Sign in
         </a>
     </p>

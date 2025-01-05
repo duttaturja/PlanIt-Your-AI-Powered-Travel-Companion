@@ -1,0 +1,511 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}PlanIt - Dev Diaries{% endblock title %}
+
+{% block body %}
+<div 
+    x-data="{ 
+        projectTimeline: [
+            {
+                date: '29 October, 2024',
+                title: 'Project Conception',
+                description: 'Initial brainstorming and concept development for an AI-powered travel companion.',
+                milestone: 'Idea Generation',
+                icon: '💡'
+            },
+            {
+                date: '31 October, 2024',
+                title: 'Research & Prototype',
+                description: 'Conducted market research and developed initial machine learning algorithms for travel recommendations.',
+                milestone: 'Proof of Concept',
+                icon: '🔬'
+            },
+            {
+                date: '11 November, 2024',
+                title: 'MVP Development',
+                description: 'Created minimum viable product with core AI recommendation engine and basic user interface.',
+                milestone: 'First Working Prototype',
+                icon: '🖥️'
+            },
+            {
+                date: '24 November, 2024',
+                title: 'AI Model Refinement',
+                description: 'Enhanced machine learning models based on initial user feedback and data analysis.',
+                milestone: 'Enhanced the Agent',
+                icon: '🤖'
+            },
+            {
+                date: '26 November, 2024',
+                title: 'Initial Testing',
+                description: 'Performed alpha testing with internal team and selected beta users.',
+                milestone: 'User Feedback',
+                icon: '🧪'
+            },
+            {
+                date: '28 November, 2024',
+                title: 'Beta Launch',
+                description: 'Launched beta version to a wider user base and began collecting comprehensive user data.',
+                milestone: 'Public Beta',
+                icon: '🚀'
+            },
+            {
+                date: 'December 2024',
+                title: 'Feature Expansion',
+                description: 'Added advanced features including real-time travel recommendations and personalization.',
+                milestone: 'Langchain Enhancement',
+                icon: '✨'
+            },
+            {
+                date: 'December 2024',
+                title: 'Full Product Launch',
+                description: 'Official launch of PlanIt with comprehensive AI-driven travel planning capabilities.',
+                milestone: 'Product Release',
+                icon: '🎉'
+            }
+        ],
+        devs: [
+            {
+                name: 'Md Ifthekar Ahamed Sayem',
+                role: 'Team Leader & AI Architect  |  C221020',
+                image: '/static/resources/team/sayem1.jpg',
+                bio: 'They say that I am the Messi of Programming. But hey what do I know? I am just a Chill guy.',
+                expertise: ['Machine Learning', 'Artificial Intelligence', 'Data Visualization'],
+                socials: {
+                    linkedin: 'https://www.linkedin.com/in/sayem-ahamed-47b890242/',
+                    github: 'https://github.com/Sayemahamed',
+                    facebook: 'https://www.facebook.com/sayemProAhamed'
+                }
+            },
+            {
+                name: 'Turja Dutta',
+                role: 'Frontend Developer  |  C221026',
+                image: '/static/resources/team/turja2.jpg',
+                <!--& AI Engineer bio: 'Teaching machines to think, occasionally convincing them not to take over the world., 'Natural Language Processing'', -->
+                bio: 'Building systems for today and intelligence for tomorrow, one project at a time.',
+                expertise: ['Full Stack Development', 'Artificial Intelligence'],
+                socials: {
+                    linkedin: 'https://www.linkedin.com/in/duttaturja/',
+                    github: 'https://github.com/duttaturja',
+                    facebook: 'https://www.facebook.com/turja.dutta.313'
+                }
+            },
+            {
+                name: 'Mir Md. Tarhimul Quader Fahim',
+                role: 'Backend Developer  |  C221017',
+                image: '/static/resources/team/fahim.jpg',
+                bio: 'Dori me Interimo, adapare Dori me Ameno, Ameno',
+                expertise: ['Django', 'Python', 'Backend Engineering'],
+                socials: {
+                    linkedin: 'https://www.linkedin.com/in/tarhimul/',
+                    github: 'https://github.com/mmtq',
+                    facebook: 'https://www.facebook.com/mir.tarhimul'
+                }
+            },
+            {
+                name: 'Avishek Das',
+                role: 'Data Scientist & Quality Assurance Engineer  |  C221025',
+                image: '/static/resources/team/avisek.jpg', 
+                bio: 'A dedicated and innovative developer who is passionate about leveraging technology to create impactful solutions.',
+                expertise: ['Data Analysis', 'Data Engineering', 'Quality Assurance'],
+                socials: {
+                    linkedin: 'https://www.linkedin.com/in/avishek-das-234247277/',
+                    github: 'https://github.com/notavishek',
+                    facebook: 'https://www.facebook.com/profile.php?id=100032946713046'
+                }
+            }
+        ]
+    }"
+    class="bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen text-white"
+>
+    <!-- Hero Section -->
+    <div class="parallax-bg bg-cover bg-center relative h-screen flex items-center justify-center" 
+         style="background-image: url('/static/resources/images/parallax-bg.jpg')">
+        <div class="absolute inset-0 bg-black opacity-80"></div>
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 typewriter">
+                PlanIt: AI Travel Companion
+            </h1>
+            <p class="text-xl md:text-2xl max-w-2xl mx-auto animate-fade-in-up delay-500">
+                Revolutionizing travel planning through intelligent AI-driven experiences
+            </p>
+        </div>
+    </div>
+
+    <!-- Development Timeline -->
+    <div class="container mx-auto px-4 py-16">
+        <h2 class="text-4xl font-bold text-center mb-8">The Development Journey</h2>
+        <p class="text-center text-lg mb-12">Explore how PlanIt transformed from a mere idea to a cutting-edge AI tool.</p>
+        <div class="timeline-container">
+            <div class="timeline-circle" style="top: 0;"></div>
+            <template x-for="(event, index) in projectTimeline" :key="index">
+                <div 
+                    class="mb-8 flex items-center w-full timeline-event"
+                    :class="index % 2 === 0 ? 'flex-row-reverse' : ''"
+                >
+                    <div class="w-5/12 hidden md:block"></div>
+                    
+                    <div class="z-20 flex items-center order-1">
+                        <div class="h-12 w-12 bg-blue-600 rounded-full shadow-lg flex items-center justify-center">
+                            <span x-text="event.icon" class="text-2xl"></span>
+                        </div>
+                    </div>
+                    
+                    <div 
+                        class="order-1 bg-gray-800 rounded-lg shadow-xl w-full md:w-5/12 px-6 py-4 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                        :class="index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'"
+                    >
+                        <h3 class="mb-2 font-bold text-xl text-blue-400" x-text="event.date"></h3>
+                        <h4 class="mb-2 text-lg font-semibold" x-text="event.title"></h4>
+                        <p class="text-gray-300" x-text="event.description"></p>
+                        <span 
+                            class="mt-2 inline-block bg-blue-600 text-white px-3 py-1 rounded-full text-sm"
+                            x-text="event.milestone"
+                        ></span>
+                    </div>
+                </div>
+            </template>
+            <div class="timeline-circle" style="top: calc(100% - 12px);"></div>
+        </div>
+    </div>
+    
+    <!-- Case Studies Section -->
+    <section class="bg-gray-900 py-16">
+        <div class="container mx-auto px-8">
+            <h2 class="text-4xl font-bold text-center mb-8">Case Studies</h2>
+            <p class="text-center text-lg mb-12">Explore how PlanIt has successfully transformed travel experiences.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl hover:bg-blue-600 hover:text-white h-48">
+                    <h3 class="font-semibold text-xl mb-2">🏖️ Family Vacation Planning</h3>
+                    <p>Learn how a family used PlanIt to create a memorable vacation itinerary that catered to everyone's interests.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl hover:bg-blue-600 h-48">
+                    <h3 class="font-semibold text-xl mb-2">💼 Business Trip Optimization</h3>
+                    <p>Discover how a corporate team streamlined their travel plans, saving time and costs with PlanIt.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl hover:bg-blue-600 h-48">
+                    <h3 class="font-semibold text-xl mb-2">🏞️ Adventure Travel Success</h3>
+                    <p>See how adventure seekers utilized PlanIt to find unique experiences tailored to their thrill-seeking nature.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <div class="bg-gray-900 py-16">
+        <div class="container mx-auto px-8">
+            <h2 class="text-4xl font-bold text-center mb-8">Our Technology Stack</h2>
+            <p class="text-center text-lg mb-12">The tools and frameworks behind PlanIt's exceptional performance.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!--Python Card-->
+                <div class="relative group bg-gray-700 p-6 rounded-lg text-center overflow-hidden">
+                    <div class="group-hover:blur-sm transition duration-300">
+                        <img src="/static/resources/images/python-original.svg" alt="Python" class="w-20 h-20 mx-auto mb-4" />
+                        <h3 class="font-semibold">Python</h3>
+                        <p class="text-sm text-gray-300">Machine Learning Backend</p>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-90 h-4/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center">
+                        <p class="text-white text-lg font-semibold italic px-2">Core Language for Langchain and Backend</p>
+                    </div>
+                </div>
+                  
+                <!-- Ollama Card -->
+                <div class="relative group bg-gray-700 p-6 rounded-lg text-center overflow-hidden">
+                    <div class="group-hover:blur-sm transition duration-300">
+                        <img src="/static/resources/images/ollama.svg" alt="ollama" class="w-20 h-20 mx-auto mb-4" />
+                        <h3 class="font-semibold">Ollama</h3>
+                        <p class="text-sm text-gray-300">AI Model Development</p>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-90 h-4/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center">
+                        <p class="text-white text-lg font-semibold italic px-2">Advanced AI model tailored for efficient recommendations.</p>
+                    </div>
+                  </div>
+              
+                  <!-- Django Card -->
+                  <div class="relative group bg-gray-700 p-6 rounded-lg text-center overflow-hidden">
+                    <div class="group-hover:blur-sm transition duration-300">
+                        <img src="/static/resources/images/django-plain.svg" alt="Django" class="w-20 h-20 mx-auto mb-4" />
+                        <h3 class="font-semibold">Django</h3>
+                        <p class="text-sm text-gray-300">Web Framework</p>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-90 h-4/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center">
+                        <p class="text-white text-lg font-semibold italic px-2">Scalable and secure web framework for backend development.</p>
+                    </div>
+                  </div>
+              
+                  <!-- JavaScript Card -->
+                  <div class="relative group bg-gray-700 p-6 rounded-lg text-center overflow-hidden">
+                    <div class="group-hover:blur-sm transition duration-300">
+                        <img src="/static/resources/images/javascript-original.svg" alt="JavaScript" class="w-20 h-20 mx-auto mb-4" />
+                        <h3 class="font-semibold">JavaScript</h3>
+                        <p class="text-sm text-gray-300">Interactive Features</p>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-90 h-4/5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center">
+                        <p class="text-white text-lg font-semibold italic px-2">Interactive front-end features and seamless user experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Developers Section -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-6">The Team Behind PlanIt</h2>
+        <p class="text-center text-md mb-12">Meet the passionate group of developers who wanted to revolutionize Travelling through PlanIt.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 px-8">
+            <template x-for="(dev, index) in devs" :key="index">
+                <div class="grid grid-cols-3 bg-gray-800 rounded-lg h-80 shadow-md overflow-hidden">
+                    <!-- Image Section -->
+                    <div class=" overflow-hidden relative group">
+                        <img 
+                            :src="dev.image" 
+                            :alt="dev.name + ' profile picture'" 
+                            class="dev-image w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        >
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="p-4 px-8 col-span-2 flex flex-col justify-center space-y-2">
+                        <h3 class="text-xl font-bold text-blue-400" x-text="dev.name"></h3>
+                        <p class="text-gray-300 text-sm" x-text="dev.role"></p>
+
+                        <p class="text-gray-300 text-xs" x-text="dev.bio"></p>
+
+                        <!-- Expertise -->
+                        <div class="mt-4">
+                            <h4 class="font-semibold text-gray-300 mb-1 text-xs">Expertise:</h4>
+                            <div class="flex flex-wrap gap-1 pl-4">
+                                <template x-for="skill in dev.expertise" :key="skill">
+                                    <span 
+                                        class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
+                                        x-text="skill"
+                                    ></span>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="mt-4">
+                            <h4 class="font-semibold text-gray-300 mb-1 text-xs">Socials:</h4>
+                            <div class="flex space-x-4 pt-2">
+                                <!-- LinkedIn -->
+                                <a :href="dev.socials.linkedin" class="text-blue-600 hover:text-blue-800 bg-white rounded-lg transition-colors" aria-label="LinkedIn Profile">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                    </svg>
+                                </a>
+                                <!-- GitHub -->
+                                <a :href="dev.socials.github" class="text-gray-300 hover:text-gray-400 transition-colors" aria-label="GitHub Profile">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" fill="gray-300">
+                                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.263.82-.582 0-.287-.01-1.047-.016-2.055-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.332-1.755-1.332-1.755-1.09-.744.082-.729.082-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.805 1.305 3.49.997.108-.776.418-1.305.76-1.605-2.665-.3-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.236-3.22-.124-.303-.536-1.523.116-3.176 0 0 1.01-.323 3.3 1.23.958-.266 1.984-.398 3.004-.403 1.02.005 2.046.137 3.005.403 2.29-1.554 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.807 5.624-5.48 5.92.43.37.812 1.102.812 2.222 0 1.606-.014 2.903-.014 3.293 0 .322.216.7.825.581C20.565 21.796 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+                                    </svg>
+                                </a>
+                                <!-- Facebook -->
+                                <a :href="dev.socials.facebook" class="text-blue-600 hover:text-blue-800 bg-white rounded-md transition-colors" aria-label="Facebook Profile">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.35C0 23.4.6 24 1.325 24h21.35C23.4 24 24 23.4 24 22.675V1.325C24 .6 23.4 0 22.675 0zm-3.15 24h-4.5v-9.5h-3v-4h3v-3c0-3.1 1.9-4.5 4.5-4.5 1.3 0 2.5.1 2.5.1v3h-1.4c-1.1 0-1.5.7-1.5 1.5v2h4l-1 4h-3v9.5z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <!-- Supervisor section -->
+    <section class="container mx-auto px-8 py-6">
+        <h2 class="text-3xl font-bold text-center mb-6">Supervised by</h2>
+        <p class=" text-center text-md mb-12">Meet the expert guiding our project towards success.</p>
+        <div class="h-4/6 flex items-center justify-center">
+            <div class="grid grid-cols-3 bg-gray-800 rounded-lg h-[75%] w-[90%] shadow-md overflow-hidden"> <!-- Adjusted height and width -->
+                <!-- Image Section -->
+                <div class="overflow-hidden relative group">
+                    <img 
+                        src="/static/resources/team/asfe_sir.jpg" 
+                        alt="Arif Mohammad Asfe profile picture" 
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    >
+                </div>
+            
+                <!-- Content Section -->
+                <div class="p-8 col-span-2 flex flex-col justify-center space-y-4">
+                    <h3 class="text-2xl font-bold text-blue-400">Arif Mohammad Asfe</h3>
+
+                    <!-- Bio -->
+                    <p class="text-gray-300 text-sm">Arif Mohammad Asfe is an adjunct faculty at International Islamic University Chittagong (IIUC) and an accomplished expert in big data, deep learning, meta-model and meta learning. Known for his keen interest in analytics, he is dedicated to advancing research in meta learning and neuroscience technologies.</p>
+                
+                    <!-- Expertise -->
+                    <div class="mt-4">
+                        <h4 class="font-semibold text-gray-300 mb-1 text-base">Expertise:</h4>
+                        <div class="flex flex-wrap gap-1 pl-4">
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Big Data</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Machine learning</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Artificial Intelligence</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Data Meta-Model</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Data Meta Learning</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Computational Neuroscience</span>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full"> Cognitive Science</span>
+                        </div>
+                    </div>                    
+                
+                    <!-- Social Links -->
+                    <div class="mt-4 mb-8">
+                        <h4 class="font-semibold text-gray-300 text-base">Socials:</h4>
+                        <div class="flex space-x-4 pt-4">
+                            <!-- LinkedIn -->
+                            <a :href="https://www.linkedin.com/in/arifasfe/" class="text-blue-600 cursor-pointer hover:text-blue-800 bg-white rounded-lg transition-colors" aria-label="LinkedIn Profile">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                            </a>
+                            <!-- GitHub -->
+                            <a :href="https://github.com/arifasfe" class="text-gray-300 cursor-pointer hover:text-gray-400 transition-colors" aria-label="GitHub Profile">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" fill="gray-300">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.263.82-.582 0-.287-.01-1.047-.016-2.055-3.338.727-4.042-1.61-4.042-1.61-.546-1.387-1.332-1.755-1.332-1.755-1.09-.744.082-.729.082-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.835 2.805 1.305 3.49.997.108-.776.418-1.305.76-1.605-2.665-.3-5.467-1.332-5.467-5.93 0-1.31.468-2.38 1.236-3.22-.124-.303-.536-1.523.116-3.176 0 0 1.01-.323 3.3 1.23.958-.266 1.984-.398 3.004-.403 1.02.005 2.046.137 3.005.403 2.29-1.554 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.807 5.624-5.48 5.92.43.37.812 1.102.812 2.222 0 1.606-.014 2.903-.014 3.293 0 .322.216.7.825.581C20.565 21.796 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+                                </svg>
+                            </a>
+                            <!-- Facebook -->
+                            <a :href="https://www.facebook.com/reverse.battousai" class="text-blue-600 cursor-pointer hover:text-blue-800 bg-white rounded-md transition-colors" aria-label="Facebook Profile">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.35C0 23.4.6 24 1.325 24h21.35C23.4 24 24 23.4 24 22.675V1.325C24 .6 23.4 0 22.675 0zm-3.15 24h-4.5v-9.5h-3v-4h3v-3c0-3.1 1.9-4.5 4.5-4.5 1.3 0 2.5.1 2.5.1v3h-1.4c-1.1 0-1.5.7-1.5 1.5v2h4l-1 4h-3v9.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Comments about the team and the project -->
+                    <div class="pt-8">
+                        <blockquote class="text-gray-300 text-sm relative pl-8 pr-8 text-justify">
+                            <span class="text-gray-500 font-serif text-5xl absolute left-0 top-4 transform -translate-y-1/2">&ldquo;</span>
+                            It has been a pleasure to supervise this talented team working on <strong>PlanIt</strong>, an AI-powered travel companion that redefines the travel planning experience. The team has consistently demonstrated exceptional proficiency, commitment, and innovative thinking throughout the project. Their collaborative spirit and dedication to excellence have been truly inspiring, setting a benchmark for what can be achieved through teamwork and creativity. <strong>PlanIt</strong> AI travel companion has the potential to revolutionize the travel industry by generating personalized itineraries, recommending budget-friendly accommodations, and offering real-time suggestions based on user preferences. Powered by AI technologies like <strong>Ollama</strong>, <strong>LLM</strong> and <strong>NLP</strong>, it provides a <strong>Chat-based</strong> interface for seamless and interactive experience, making travel planning effortless and enjoyable. I am confident that this solution will positively impact the experience of travelling.
+                            <span class="text-gray-500 font-serif text-5xl absolute right-0 -bottom-2 transform translate-y-1/2">&rdquo;</span>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </section>
+
+    <!-- Our Mission Section -->
+    <section class="bg-gray-900 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-8">Our Mission</h2>
+            <p class="text-center text-lg mb-12">At PlanIt, we strive to revolutionize the travel planning experience through innovative technology and personalized service.</p>
+            <p class="text-center text-gray-300 max-w-2xl mx-auto">
+                Our mission is to empower travelers with intelligent tools that simplify the planning process, ensuring that every journey is memorable and tailored to individual preferences. We believe in making travel accessible, enjoyable, and stress-free for everyone.<br><br>
+                Join us on this exciting journey of revolutionizing the way we plan and experience travel. Let's make your travel dreams come true with PlanIt!
+            </p>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
+            </div>
+        </div>
+    </section>
+</div>
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+            color: orange;
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+            color: white;
+        }
+    }
+    /* Custom Timeline Styles */
+    .timeline-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .timeline-container::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        background-color: #1E40AF;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -3px;
+        border-radius: 3px;
+    }
+
+    /* .animated-gradient-text {
+        background: linear-gradient(-45deg, #60a5fa, #818cf8, #34d399, #818cf8);
+        background-size: 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradient 6s ease infinite;
+    } */
+
+    .animate-fade-in-up {
+        animation: fadeInUp 2s ease-out;
+    }
+
+    /* Parallax Effect */
+    .parallax-bg {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    @media screen and (max-width: 768px) {
+        .timeline-container::after {
+            left: 50%;
+            margin-left: -3px;
+            z-index: -1;
+        }
+        .timeline-circle {
+            display: none;
+        }
+    }
+
+    /* New styles for circles */
+    .timeline-circle {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background-color: #1E40AF;
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .typewriter {
+        overflow: hidden;
+        border-right: .15em solid orange; 
+        white-space: nowrap; 
+        animation: typing 4s steps(38, end), blink-caret .75s step-end infinite;
+    }
+
+    @keyframes typing {
+        from {
+            width: 0; 
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    @keyframes blink-caret {
+        from, to {
+            border-color: transparent;
+        }
+        50% {
+            border-color: orange;
+        }
+    }
+
+    .typewriter.delay-300 {
+        animation-delay: 4s;
+    }
+</style>
+{% endblock body %}
