@@ -29,6 +29,7 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path("core/", include("core.urls")),
     path("", views.index, name="index"),
+    path("devs/", views.meet_the_devs, name="meet_the_devs"),
 ]
 
 if settings.DEBUG:

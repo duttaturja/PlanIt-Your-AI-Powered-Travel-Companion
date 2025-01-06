@@ -156,3 +156,4 @@ def profile(request):
         'available_providers': available_providers,
         'connected_providers': connected_providers,
     })
+

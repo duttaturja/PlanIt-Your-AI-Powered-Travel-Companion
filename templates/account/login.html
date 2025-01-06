@@ -5,7 +5,7 @@
 {% block title %}Sign In{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
+<div class="mt-12 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
     <div class="max-w-md w-full space-y-8 bg-card p-8 rounded-lg border border-border">
         <div>
             <h2 class="mt-6 text-center text-3xl font-bold text-copy-primary">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="text-sm">
-                    <a href="{% url 'account_reset_password' %}" class="font-medium text-cta hover:text-cta-active">
+                    <a href="{% url 'account_reset_password' %}" class="font-medium text-blue-600 hover:text-white">
                         Forgot your password?
                     </a>
                 </div>
@@ -76,23 +76,23 @@
 
             <div>
                 <button type="submit"
-                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-cta-text bg-cta hover:bg-cta-active focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
-                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                        <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
+                    <!-- <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <svg class="h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                             fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
                                 d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
                                 clip-rule="evenodd" />
                         </svg>
-                    </span>
+                    </span> -->
                     Sign in
                 </button>
             </div>
         </form>
 
-        <p class="mt-8 text-center text-sm text-copy-secondary">
+        <p class="mt-8 text-center text-sm text-gray-400">
             Don't have an account?
-            <a href="{{ signup_url }}" class="font-medium text-cta hover:text-cta-active">
+            <a href="{{ signup_url }}" class="font-medium text-blue-600 hover:text-white">
                 Sign up
             </a>
         </p>
