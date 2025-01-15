@@ -49,31 +49,45 @@
                     class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent focus:bg-background"
                     placeholder="Email address">
             </div>
-            <div>
+            <div class="relative">
                 <label for="id_password1" class="sr-only">Password</label>
                 <input id="id_password1" name="password1" type="password" required
                     class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     placeholder="Password">
+                <button type="button" id="togglePassword1" class="absolute inset-y-0 right-0 flex items-center px-3">
+                    <svg id="passwordVisible1" class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg id="passwordHidden1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5 text-gray-500 hidden">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.5 12c1.7 4.5 5.9 7.5 9.5 7.5s7.8-3 9.5-7.5c-1.7-4.5-5.9-7.5-9.5-7.5S4.2 7.5 2.5 12z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12c0 1.7 1.3 3 3 3s3-1.3 3-3-1.3-3-3-3-3 1.3-3 3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                    </svg>
+                </button>
             </div>
-            <div>
+            <div class="relative">
                 <label for="id_password2" class="sr-only">Confirm Password</label>
                 <input id="id_password2" name="password2" type="password" required
                     class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background text-copy-primary placeholder-copy-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     placeholder="Confirm Password">
+                <button type="button" id="togglePassword2" class="absolute inset-y-0 right-0 flex items-center px-3">
+                    <svg id="passwordVisible2" class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg id="passwordHidden2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5 text-gray-500 hidden">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.5 12c1.7 4.5 5.9 7.5 9.5 7.5s7.8-3 9.5-7.5c-1.7-4.5-5.9-7.5-9.5-7.5S4.2 7.5 2.5 12z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12c0 1.7 1.3 3 3 3s3-1.3 3-3-1.3-3-3-3-3 1.3-3 3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                      </svg>
+                </button>
             </div>
         </div>
 
         <div>
             <button type="submit"
                 class="group relative w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta">
-                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                    <!-- <svg class="h-5 w-5 text-cta-text" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                        fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                            clip-rule="evenodd" />
-                    </svg> -->
-                </span>
                 Sign up
             </button>
         </div>
@@ -81,9 +95,34 @@
 
     <p class="mt-8 text-center text-sm text-gray-400">
         Already have an account?
-        <a href="{{ login_url }}" class="font-medium text-blue-600 hover:text-blue-800">
+        <a href="{{ login_url }}" class="font-medium text-blue-600 hover:text-white">
             Sign in
         </a>
     </p>
 </div>
+
+<script>
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordInput1 = document.getElementById('id_password1');
+    const passwordInput2 = document.getElementById('id_password2');
+    const passwordVisible1 = document.getElementById('passwordVisible1');
+    const passwordHidden1 = document.getElementById('passwordHidden1');
+    const passwordVisible2 = document.getElementById('passwordVisible2');
+    const passwordHidden2 = document.getElementById('passwordHidden2');
+
+    togglePassword1.addEventListener('click', () => {
+        const isPasswordVisible = passwordInput1.type === 'text';
+        passwordInput1.type = isPasswordVisible ? 'password' : 'text';
+        passwordVisible1.classList.toggle('hidden', !isPasswordVisible);
+        passwordHidden1.classList.toggle('hidden', isPasswordVisible);
+    });
+
+    togglePassword2.addEventListener('click', () => {
+        const isPasswordVisible = passwordInput2.type === 'text';
+        passwordInput2.type = isPasswordVisible ? 'password' : 'text';
+        passwordVisible2.classList.toggle('hidden', !isPasswordVisible);
+        passwordHidden2.classList.toggle('hidden', isPasswordVisible);
+    });
+</script>
 {% endblock %}

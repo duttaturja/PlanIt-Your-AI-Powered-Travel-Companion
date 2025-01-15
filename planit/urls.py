@@ -30,6 +30,9 @@ urlpatterns = [
     path("core/", include("core.urls")),
     path("", views.index, name="index"),
     path("devs/", views.meet_the_devs, name="meet_the_devs"),
+    path("legal/privacy-policy/", views.privacy_policy, name="privacy_policy."),
+    path("legal/terms-of-service/", views.terms_of_services, name="terms_of_services."),
+    path("legal/", views.legal, name="legal"),
 ]
 
 if settings.DEBUG:
