@@ -1,4 +1,4 @@
-{# Navbar #}
+<!-- {# Navbar #}
 <nav class="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -82,6 +82,59 @@
             {% else %}
                 <a href="{% url 'account_login' %}" class="nav-link block text-copy-secondary">Sign In</a>
             {% endif %}
+        </div>
+    </div>
+</nav> -->
+
+<nav class="bg-blue-600 fixed w-full z-50 top-0 shadow-lg transition-all duration-300 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex-shrink-0">
+                <a href="/" class="text-white font-bold text-2xl hover:text-blue-200 transition-colors duration-300">
+                    <span class="text-green-400">Plan</span>It
+                </a>
+            </div>
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-center space-x-6">
+                    <a href="#features " class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Features</a>
+                    <a href="#testimonials" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Testimonials</a>
+                    <a href="#contact" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Contact</a>
+                    <a href="/devs" class="text-white hover:text-blue-200 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Dev Diaries</a>
+                    {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-4 ml-6">
+                        <a href="/core/accounts/profile" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Profile</a>
+                        <a href="/accounts/logout" class="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Logout</a>
+                    </div>
+                    {% else %}
+                    <div class="flex items-center space-x-4 ml-6">
+                        <a href="/accounts/login" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Login</a>
+                        <a href="/accounts/signup" class="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md hover:shadow-lg">Register</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" 
+                        class="text-white p-2 rounded-md hover:bg-blue-500 transition-colors duration-300 
+                               focus:outline-none focus:ring-2 focus:ring-white oveflow-hidden">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-blue-600 border-t border-blue-500">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="#features" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Features</a>
+            <a href="#testimonials" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Testimonials</a>
+            <a href="#contact" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Contact</a>
+            <a href="/devs" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition-colors duration-300">Dev Diaries</a>
+            <div class="pt-4 pb-3 border-t border-blue-500">
+                <a href="/accounts/login" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Login</a>
+                <a href="/accounts/signup" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-500 transition-colors duration-300">Register</a>
+            </div>
         </div>
     </div>
 </nav>

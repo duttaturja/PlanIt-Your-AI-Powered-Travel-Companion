@@ -69,7 +69,7 @@
                 {% for message in messages %}
                     <div class="flex {% if message.role == 'user' %}justify-end{% endif %} items-start gap-2 animate-fade-in">
                         {% if message.role != 'user' %}
-                            <img src="{% static 'images/planit-avatar.png' %}" 
+                            <img src="https://img.freepik.com/premium-photo/biometrics-technology-portrait-blue_53876-334136.jpg" 
                                  alt="PlanIt" 
                                  class="w-8 h-8 rounded-full">
                         {% endif %}
@@ -80,7 +80,7 @@
                         </div>
 
                         {% if message.role == 'user' %}
-                            <img src="https://ui-avatars.com/api/?background=random" 
+                            <img src="{{user.profile.avatar.url}}"
                                  alt="You" 
                                  class="w-8 h-8 rounded-full">
                         {% endif %}

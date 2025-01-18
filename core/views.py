@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from Agent.Agent import TravelAgent
-import logging, pyttsx3
+import logging, pyttsx3, json, os
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -11,8 +11,7 @@ from allauth.socialaccount import providers
 from allauth.socialaccount.providers.base import ProviderException
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-import json, os
+from django.conf import settings 
 
 # from gtts import gTTS
 # from django.core.files.storage import default_storage
@@ -76,6 +75,7 @@ logger = logging.getLogger(__name__)
 # Initialize the TravelAgent as a global instance
 travel_agent = TravelAgent()
 
+@login_required
 def index(request):
     context = {
         'messages': request.session.get('chat_history', []),

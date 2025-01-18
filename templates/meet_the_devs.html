@@ -4,6 +4,7 @@
 {% block title %}PlanIt - Dev Diaries{% endblock title %}
 
 {% block body %}
+{% include 'fragments/navbar.html' %}
 <div 
     x-data="{ 
         projectTimeline: [
@@ -440,9 +441,6 @@
                 Our mission is to empower travelers with intelligent tools that simplify the planning process, ensuring that every journey is memorable and tailored to individual preferences. We believe in making travel accessible, enjoyable, and stress-free for everyone.<br><br>
                 Join us on this exciting journey of revolutionizing the way we plan and experience travel. Let's make your travel dreams come true with PlanIt!
             </p>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-gray-400">Copyright &copy; 2024 PlanIt.org PlanIt-Your AI Travel Companion. All rights reserved.</p>
-            </div>
         </div>
     </section>
 </div>
@@ -549,4 +547,5 @@
         animation-delay: 4s;
     }
 </style>
+{% include 'fragments/footer.html' %}
 {% endblock body %}
