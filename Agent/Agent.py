@@ -46,8 +46,14 @@ class TravelAgent:
                 "Help users plan their trips by providing detailed, "
                 "personalized travel recommendations and itineraries. "
                 "Focus on understanding the user's travel preferences, "
-                "budget constraints, and specific interests."
-            )),
+                "budget constraints, duration of visit, persons going to visit and specific interests. "
+                "If user has not provided any entity information about budget, persons and dates, you can "
+                "ask the user to provide more information about budget, and budget entities only. "
+                "If user has not provided any entity information other than the mentioned entites of budget, persons and dates, don't ask the user to provide more information. "
+                "In that case, you can provide generic recommendations based on given budget, persons and dates. "
+                "Use the provided entity information to maintain context. "
+                "Give the output in text format."
+            )), #SystemMessage where system will ask for necessary entity information if not given
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}")
         ])
@@ -62,6 +68,7 @@ class TravelAgent:
                 "preferences": self.entity_store.get("preferences", default={}),
                 "destinations": self.entity_store.get("destinations", default={}),
                 "budget": self.entity_store.get("budget", default={}),
+                "persons": self.entity_store.get("person", default={}),
                 "dates": self.entity_store.get("dates", default={}),
                 "activities": self.entity_store.get("activities", default={}),
                 "accommodation": self.entity_store.get("accommodation", default={}),
@@ -127,7 +134,8 @@ class TravelAgent:
                 "preferences": ["prefer", "like", "want", "looking for"],
                 "destinations": ["visit", "go to", "travel to", "destination"],
                 "budget": ["budget", "cost", "spend", "price", "expensive", "cheap"],
-                "dates": ["date", "when", "duration", "days", "nights", "schedule"],
+                "persons": ["person", "people", "men" , "women", "children", "man", "woman", "adult", "child", "infant"],
+                "dates": ["duration", "days", "nights", "schedule", "weeks", "months"],
                 "activities": ["activity", "do", "experience", "see", "explore", "adventure"],
                 "accommodation": ["hotel", "stay", "hostel", "airbnb", "resort", "room"],
                 "transportation": ["transport", "flight", "train", "bus", "car", "taxi"],
@@ -158,6 +166,7 @@ class TravelAgent:
             self.entity_store.delete("preferences")
             self.entity_store.delete("destinations")
             self.entity_store.delete("budget")
+            self.entity_store.delete("persons")
             self.entity_store.delete("dates")
             self.entity_store.delete("activities")
             self.entity_store.delete("accommodation")
