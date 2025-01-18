@@ -23,7 +23,7 @@ def get_memory_for_chat(chat_id):
 class TravelAgent:
 
     def __init__(self):
-        self.llm = OllamaLLM(model="qwen2.5:0.5b")
+        self.llm = OllamaLLM(model="qw")
 
         self.prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content=(
