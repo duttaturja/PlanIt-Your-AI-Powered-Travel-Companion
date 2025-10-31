@@ -1053,7 +1053,7 @@
 
     (function() {
         // Initialize EmailJS with your public key
-        emailjs.init("j5EfIx2wNO3mfyqNq"); // Replace with your actual public key
+        emailjs.init("EMAILJS_PUBLIC_KEY"); // Replace with your actual public key
 
         document.getElementById('contactForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -1078,7 +1078,7 @@
             };
 
             // Send email using EmailJS
-            emailjs.send('service_cqt1rvs', 'template_6lq0axz', templateParams)
+            emailjs.send('EMAILJS_SERVICE_ID', 'EMAILJS_TEMPLATE_ID', templateParams)
                 .then(function(response) {
                     // Show success message
                     document.getElementById('successMessage').classList.remove('hidden');
